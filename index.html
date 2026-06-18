@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>2026 西葡夢幻之旅 App</title>
     <!-- Google Fonts & Font Awesome Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght=300;400;500;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* --- 日式極簡與原生 App 視覺風格 --- */
@@ -117,21 +117,22 @@
             display: block;
         }
 
-        /* 天氣預報小工具 (改成可點擊的按鈕樣式) */
-        .weather-widget {
-            background-color: #FDFDFD;
-            border: 1px solid #EAEAEA;
-            border-radius: 12px;
-            padding: 12px 16px;
-            margin-bottom: 20px;
+        /* 天氣預報大按鈕 */
+        .weather-btn {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            text-decoration: none;
-            color: inherit;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+            background-color: var(--card-bg);
+            border: 1px solid #EAEAEA;
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+            width: 100%;
+            text-align: left;
         }
-        .weather-widget:active {
+        .weather-btn:active {
             background-color: #F5F5F5;
         }
         .weather-info h3 {
@@ -142,7 +143,8 @@
         .weather-info p {
             font-size: 11px;
             color: #E29578;
-            font-weight: 500;
+            font-weight: 600;
+            margin-top: 2px;
         }
         .weather-status {
             display: flex;
@@ -154,7 +156,7 @@
         }
         .weather-status i {
             color: #F4A261;
-            font-size: 20px;
+            font-size: 22px;
         }
 
         /* --- 每日行程卡片分類設計 --- */
@@ -339,17 +341,17 @@
 
     <!-- ==================== 頁面：每日行程 ==================== -->
     <div id="page-schedule" class="app-page active">
-        <!-- 天氣預報小工具 (升級點擊一鍵查詢即時預報) -->
-        <a id="weather-link" href="https://www.google.com/search?q=Barcelona+weather" target="_blank" class="weather-widget">
+        <!-- 天氣預報大按鈕 (改用強效 JavaScript 直連，確保 100% 可點擊) -->
+        <button id="weather-btn" class="weather-btn" onclick="openWeatherForecast()">
             <div class="weather-info">
                 <h3 id="weath-city">巴塞隆納 Barcelona</h3>
-                <p><i class="fa-solid fa-arrow-pointer"></i> 點擊查詢 2026 當日即時天氣預報</p>
+                <p><i class="fa-solid fa-arrow-pointer"></i> 點擊查詢 2026 當日即時天氣</p>
             </div>
             <div class="weather-status">
                 <i class="fa-solid fa-sun"></i>
                 <span id="weath-temp">歷史均溫 31°C</span>
             </div>
-        </a>
+        </button>
 
         <!-- 動態日程卡片容器 -->
         <div id="timeline-container"></div>
@@ -405,299 +407,182 @@
 <script>
     /* --- 全量西葡行程數據集 --- */
     const tripData = {
-        2: {
-            title: "巴塞隆納 · 不和諧街區與高第初體驗",
-            city: "巴塞隆納 Barcelona",
-            weather: "均溫 31°C",
-            icon: "fa-sun",
-            items: [
-                { time: "07:35", type: "trans", title: "抵達巴塞隆納機場 T1", desc: "通關後搭機場巴士 Aerobús A1 至加泰隆尼亞廣場，步行 5 分鐘抵達 HCC Montblanc 辦理放行李。", url: "Josep+Tarradellas+Barcelona-El+Prat+Airport", story: "持高鐵AVE車票者今天可免費兌換轉乘近郊鐵路Rodalies哦！", PNR: "機票已結清" },
-                { time: "11:30", type: "spot", title: "漫步不和諧街區", desc: "漫步在格拉西亞大道，欣賞建築巨匠們並排炫技的驚艷立面。上午順光，非常適合拍照。", url: "Manzana+de+la+Discordia", story: "這條街區因為有三棟風格迴異的豪宅並列而得名，走在馬路中島拍攝最壯觀！", gift: "阿馬特耶之家 / 莫雷拉之家" },
-                { time: "13:00", type: "spot", title: "巴特婁之家 (入內參觀)", desc: "高第以海洋奇幻為靈感的巨作。骨骼狀的柱子與面具陽台充滿魔幻感。", url: "Casa+Batllo", story: "陽光穿透中庭藍色瓷磚時光影美得像深海。", PNR: "已訂銀色票 · 預約 13:00" },
-                { time: "15:00", type: "food", title: "Tapa Tapa Passeig de Gràcia", desc: "在不和諧街區旁享用精緻豐富的西班牙小點（Tapas），簡單速吃首選。", url: "Tapa+Tapa+Passeig+de+Gracia", menu: "經典單品：經典番茄麵包、現炸小章魚" },
-                { time: "16:30", type: "spot", title: "米拉之家 (外觀拍照)", desc: "欣賞外牆如波浪般流暢起伏的石材立面。下午時段正面順光，拍照線條立體感十足。", url: "Casa+Mila", story: "這是高第設計的最後一棟私人住宅，屋頂的煙囪像外星武士！" },
-                { time: "18:00", type: "food", title: "英國宮百貨頂樓 LA PLAÇA", desc: "在百貨頂樓美食街一邊享用異國午晚餐，一邊俯瞰加泰隆尼亞廣場的繁華全景。", url: "El+Corte+Ingles+Placa+de+Catalunya" },
-                { time: "20:30", type: "spot", title: "加泰隆尼亞音樂宮 (夜景)", desc: "散步至音樂宮外部，拍攝夜晚打燈後，彩繪玻璃與精緻雕刻在夜色中交織的華麗姿態。", url: "Palau+de+la+Musica+Catalana" }
-            ]
-        },
-        3: {
-            title: "巴塞隆納 · 世紀巨作聖家堂與黃昏奎爾公園",
-            city: "巴塞隆納 Barcelona",
-            weather: "均溫 30°C",
-            icon: "fa-sun",
-            items: [
-                { time: "08:30", type: "spot", title: "聖家堂水池倒影拍攝", desc: "一早先前往聖家堂東面的高第公園，捕捉清晨順光下，聖家堂與水池完美同框的倒影。", url: "Placa+de+Gaudis+pond" },
-                { time: "09:00", type: "spot", title: "聖家堂 入內參觀", desc: "親臨神級建築神殿，觀賞陽光穿透彩色玻璃窗在森林石柱上渲染出的天堂奇景。", url: "Basílica+de+la+Sagrada+Familia", story: "這是一棟蓋了百年的上帝建築。記得下載官方APP使用語音導覽。", PNR: "已訂票 · 預約 09:00入場" },
-                { time: "09:45", type: "spot", title: "登受難立面塔頂", desc: "搭乘電梯直達高空，近距離觀賞建築頂端的果實雕刻，並鳥瞰巴塞隆納棋盤式市景。", url: "Basílica+de+la+Sagrada+Familia", PNR: "已訂票 · 預約 09:45登塔" },
-                { time: "12:30", type: "food", title: "高第大道避暑午餐", desc: "在熱鬧的高第大道上挑選一間露天餐廳吃中餐，喝杯冰咖啡或享用 Gelato 眺望聖家堂。", url: "Avinguda+de+Gaudi", food: "必吃：高第大道手工義式冰淇淋" },
-                { time: "16:30", type: "trans", title: "搭乘 Uber 前往奎爾公園", desc: "4人同行省力首選！直接搭車到奎爾公園最上方的側門（Ctra. del Carmel）進去，一路下坡最輕鬆。", url: "Park+Guell" },
-                { time: "17:00", type: "spot", title: "奎爾公園 入場參觀", desc: "漫步高第的童話花園。看點：石頭長廊、波浪石椅露台（俯瞰糖果屋經典明信片照與大海）、龍噴泉蜥蜴。", url: "Park+Guell", story: "下午陽光灑在馬賽克拼貼瓷磚上色彩最飽和、最順光！", PNR: "已訂票 · 預約 17:00" },
-                { time: "20:00", type: "spot", title: "聖家堂黃昏外觀補拍", desc: "回程再次經過聖家堂，補拍在夕陽餘暉與夜間點燈下，與白天截然不同的神聖外觀。", url: "Basílica+de+la+Sagrada+Familia" }
-            ]
-        },
-        4: {
-            title: "巴塞隆納 · 哥德區老城悠閒漫步",
-            city: "巴塞隆納 Barcelona",
-            weather: "均溫 32°C",
-            icon: "fa-cloud-sun",
-            items: [
-                { time: "09:30", type: "spot", title: "加泰隆尼亞音樂宮 入內參觀", desc: "欣賞現代主義大師多明尼克的顛峰巨作。陽光穿透倒懸的彩色玻璃穹頂時，宛如巨大的魔幻寶石。", url: "Palau+de+la+Musica+Catalana", PNR: "已訂票 · 中文語音導覽 50分鐘" },
-                { time: "11:00", type: "spot", title: "哥德區古城探險", desc: "漫步至巴塞隆納主教座堂外拍，並前往網美必拍、精緻典雅的「嘆息橋」留下合影。", url: "Pont+del+Bisbe", story: "歷史老城區巷弄昏暗，是扒手黃金熱區，包包一定要背前面！" },
-                { time: "12:00", type: "food", title: "老字號點心時光", desc: "造訪百年老店 Granja M. Viader，體驗極濃郁的熱巧克力沾現炸酥脆吉拿棒。順路買 Amorino 浪漫花瓣冰淇淋。", url: "Granja+M.+Viader", food: "Granja M. Viader", menu: "濃情熱巧克力配吉拿棒 (Churros)" },
-                { time: "12:45", type: "food", title: "El Quim de la Boquería", desc: "位於聖約瑟市場內的超火紅傳奇海鮮攤位。當地人極度熱愛，務必提早抵達卡位。", url: "El+Quim+de+la+Boqueria", menu: "必點：招牌橄欖油雙煎蛋佐小章魚 (Baby Squid with Eggs)" },
-                { time: "14:30", type: "spot", title: "蘭布拉大道逛街", desc: "沿著繁華大道散步，途經奎爾宮外觀，尋找 Casa Bruno Cuadros 建築上提著吊燈的東方龍雕刻。", url: "Casa+Bruno+Cuadros" },
-                { time: "16:00", type: "spot", title: "哥倫布紀念塔與貝爾港", desc: "向南漫步至矗立在海濱的哥倫布塔，隨後沿著藍天碧海的貝爾港木棧道往東散步，吹海風消暑。", url: "Port+Vell" },
-                { time: "17:30", type: "spot", title: "海洋聖母聖殿", desc: "造訪知名影集拍攝地。由當年的碼頭工人一磚一瓦合力蓋成，堪稱巴塞隆納的「海神媽祖廟」。", url: "Basilica+of+Santa+Maria+del+Mar" },
-                { time: "19:00", type: "spot", title: "凱旋門與城堡公園", desc: "朝聖 1888 年世界博覽會的宏偉紅磚入口拱門，漫步進城堡公園享受悠閒的傍晚時光。", url: "Arc+de+Triomf" }
-            ]
-        },
-        5: {
-            title: "巴塞隆納 ➔ 馬德里 · 聖保羅世界遺產醫院與高鐵移動",
-            city: "巴塞隆納 ➔ 馬德里",
-            weather: "均溫 34°C",
-            icon: "fa-sun",
-            items: [
-                { time: "09:30", type: "spot", title: "聖十字聖保羅醫院", desc: "參觀這座被譽為「世界上最美醫院」的世界文化遺產。重點參觀行政大樓內部，粉嫩的馬賽克與拱頂美如宮殿。", url: "Recinte+Modernista+de+Sant+Pau", PNR: "已訂票 · 09:30場次中文導覽" },
-                { time: "13:40", type: "trans", title: "前往 Sants 高鐵車站", desc: "從飯店出發至加泰隆尼亞廣場站，搭近郊鐵路 Rodalies（掃高鐵票 QR Code 可免費搭乘）前往高鐵站。14:15抵達，預留時間行李安檢。", url: "Barcelona-Sants" },
-                { time: "15:00", type: "trans", title: "搭乘 AVE 高速列車前往馬德里", desc: "搭乘 Renfe AVE 03152 高鐵，直達馬德里。預計 18:17 抵達 Madrid Puerta de Atocha。出站後步行至對面 Hotel Mediodia 辦理入住。", url: "Hotel+Mediodia", PNR: "已訂票 · 車廂 6 / 座位 09A-10B" },
-                { time: "19:00", type: "food", title: "100 Montaditos (飯店隔壁)", desc: "連鎖國民小吃小酒館。點幾款 Montaditos 迷你法棍小三明治，配上一杯清涼解渴的 Tinto de Verano（紅酒加汽水）。", url: "100+Montaditos+Princesa" },
-                { time: "20:00", type: "spot", title: "麗池公園與阿爾卡拉門", desc: "漫步至馬德里綠肺麗池公園，觀賞巍峨的阿方索十二世紀念碑。回程經過阿爾卡拉門，觀察上面的對稱古砲彈痕跡。", url: "El+Retiro+Park" },
-                { time: "21:00", type: "food", title: "La Barraca 正宗西班牙燉飯", desc: "造訪西貝萊斯廣場（大地女神噴泉）旁的老字號飯館，品嚐正宗厚實的華麗瓦倫西亞燉飯（Paella）。", url: "La+Barraca+Madrid", story: "極度熱門的名店，一定要提早預約喔！" }
-            ]
-        },
-        6: {
-            title: "馬德里 · 普拉多藝術殿堂與限定跳蚤市場",
-            city: "馬德里 Madrid",
-            weather: "均溫 35°C",
-            icon: "fa-sun",
-            items: [
-                { time: "09:45", type: "spot", title: "普拉多美術館 (準備入場)", desc: "提早前往赫羅尼莫斯入口（Acceso de Jerónimos）排隊。館內禁止拍照，請靜心享受世界三大博物館的藝術震撼。", url: "Prado+Museum", story: "鎮館三寶必看：維拉斯奎茲《侍女》、哥雅《1808年5月3日》、波希《人間樂園》。", PNR: "已訂票 · 10:00場次含語音導覽" },
-                { time: "13:30", type: "spot", title: "太陽門廣場", desc: "馬德里的正中心。尋找西班牙公路網起點的「零公里座標」石碑，並與經典地標「熊與莓果樹銅像」拍照。", url: "Puerta+del+Sol" },
-                { time: "14:00", type: "food", title: "老城鱈魚小吃與甜餅", desc: "到百年糕點店 La Mallorquina 買熱騰騰的拿坡里甜餅，再到旁邊傳奇小店 Casa Labra 站吧台吃金黃酥脆的現炸鱈魚塊。", url: "Casa+Labra", menu: "必點：炸鱈魚塊 (Tajada de Bacalaau)、拿坡里甜餅" },
-                { time: "14:40", type: "food", title: "馬德里主廣場與炸魷魚三明治", desc: "漫步進被紅磚建築包圍的宏偉主廣場。前往名店 La Campana 買一份外酥內軟、塞滿現炸魷魚圈的三明治，坐在拱門下享用。", url: "La+Campana+Madrid", food: "La Campana 炸魷魚三明治" },
-                { time: "15:20", type: "spot", title: "El Rastro 露天跳蚤市場", desc: "從主廣場往南走，趕在收攤前朝聖歐洲最大的露天跳蚤市場，感受最地道的馬德里市集尾聲魅力。", url: "El+Rastro" },
-                { time: "16:30", type: "food", title: "聖米格爾市場 Tapas 大快朵頤", desc: "玻璃鋼骨架結構的高檔美食市場。點幾款奢華的生火腿、海鮮 Tapas。利用消費收據可以免費使用地下室乾淨廁所。", url: "Mercado+de+San+Miguel" },
-                { time: "18:00", type: "spot", title: "市政廳廣場", desc: "漫步造訪巴洛克式古老市政廳，欣賞環繞廣場、橫跨三個不同世紀的優雅古老建築群。", url: "Plaza+de+la+Villa" },
-                { time: "21:00", type: "food", title: "100 Montaditos (週日瘋狂優惠)", desc: "週日限定超級特惠！店內幾乎所有口味的 Montaditos 迷你三明治通通只要 €1，炸物點心拼盤只要 €2，CP值破天際！", url: "100+Montaditos+Princesa" }
-            ]
-        },
-        7: {
-            title: "馬德里 · 皇家宮殿古典浪漫與古埃及神殿日落",
-            city: "馬德里 Madrid",
-            weather: "均溫 36°C",
-            icon: "fa-sun",
-            items: [
-                { time: "08:30", type: "food", title: "Chocolatería San Ginés", desc: "朝聖馬德里最傳奇的吉拿棒老店。像當地人一樣帥氣地站在吧台點餐享用，價格比座位區還便宜哦！", url: "Chocolatería+San+Gines", menu: "必點：香濃黑巧克力沾吉拿棒、檸檬冰沙 (消暑聖品)" },
-                { time: "09:30", type: "food", title: "Museo del Jamón (火腿博物館)", desc: "極具視覺震撼的火腿專賣店，天花板掛滿密密麻麻的火腿，點份平價現切伊比利生火腿三明治當二輪早餐。", url: "Museo+del+Jamon" },
-                { time: "10:30", type: "spot", title: "阿穆德納聖母主教座堂", desc: "新哥德式宏偉教堂（免費參觀）。走到旁邊的小山丘上，可以拍到主教座堂與隔壁皇宮大同框的經典宏偉構圖。", url: "Almudena+Cathedral" },
-                { time: "11:30", type: "spot", title: "馬德里皇宮與東方廣場", desc: "拍攝歐洲最奢華皇宮之一的壯麗外觀。漫步到前方的東方廣場，近距離觀察全球首座「前腳懸空」的國王馬術青銅雕像。", url: "Plaza+de+Oriente", story: "可以坐在老派的 Café de Oriente 戶外雅座點杯冷飲，欣賞街頭藝人表演。" },
-                { time: "15:30", type: "food", title: "Mallorca Pastelería 下午茶避暑", desc: "正午酷熱時段，躲進精品級甜點店，享用源自馬約卡島的傳統螺旋甜麵包，配上一杯冰涼的咖啡牛奶。", url: "Pasteleria+Mallorca", menu: "必點：螺旋甜麵包 (Ensaimada) 、咖啡牛奶 (Café con Leche)" },
-                { time: "18:30", type: "spot", title: "西班牙廣場與 Riu Hotel 360°觀景台", desc: "先與唐吉訶德和桑丘的青銅雕像合照。隨後登上 Riu 飯店 27 樓頂樓觀景台，挑戰驚險的「全透明玻璃天橋」，360度俯瞰馬德里震撼全景。", url: "360+Rooftop+Bar+Riu+Plaza+Espana" },
-                { time: "21:00", type: "spot", title: "德波神殿 埃及古蹟日落", desc: "由埃及政府贈送的兩千年正統古埃及神殿。提早前來卡位，靜靜等待 21:30 - 21:48 期間，神殿在水中倒影與粉紫色晚霞交織的绝美奇景。", url: "Templo+de+Debod" }
-            ]
-        },
-        8: {
-            title: "馬德里 ➔ 塞哥維亞 · 兩千年水道橋與脆皮烤乳豬",
-            city: "塞哥維亞 Segovia",
-            weather: "均溫 29°C",
-            icon: "fa-sun",
-            items: [
-                { time: "08:30", type: "trans", title: "高鐵出發前往查馬丁站", desc: "自 Atocha 車站搭通勤火車 Cercanías 至 Chamartín 車站，安檢後搭乘高鐵 AVANT 34763 班次前往塞哥維亞 Guiomar 高鐵站。", url: "Madrid+Chamartín+Station", PNR: "已訂票 · 09:25高鐵開車" },
-                { time: "10:00", type: "trans", title: "轉乘 11 號巴士直達水道橋", desc: "出高鐵站直接轉乘 11 號接駁公車（車程15分鐘）直達地標羅馬水道橋廣場，抬頭仰望兩千年無水泥榫接的宏偉引水古橋。", url: "Aqueduct+of+Segovia" },
-                { time: "13:00", type: "food", title: "Mesón de Cándido 脆皮烤乳豬", desc: "水道橋旁的百年傳奇總店！朝聖世紀名廚以瓷盤切乳豬、隨後砸碎瓷盤的傳統儀式，大口品嚐皮脆肉嫩、入口即化的神級烤乳豬。", url: "Meson+De+Candido", food: "Mesón de Cándido 烤乳豬", PNR: "已預約 13:00 用餐" },
-                { time: "15:00", type: "food", title: "聖馬丁教堂與百年甜點 Ponche", desc: "散步經過古老聖馬丁教堂，造訪名店 Limón y menta 購買塞哥維亞代表性甜點 Ponche（糖水海綿蛋糕外裹菱格紋杏仁膏），配冰咖啡絕配。", url: "Limon+y+Menta", menu: "名產甜點：Ponche 蛋糕、Crocantinos 冰淇淋" },
-                { time: "16:30", type: "spot", title: "古城牆步道攀登", desc: "前往聖安德烈門旁的旅遊資訊中心（Espacio Muralla）購票登上古老城牆，漫步步道俯瞰城外翠綠的深邃山谷與遠方城堡。", url: "Muralla+de+Segovia" },
-                { time: "17:30", type: "spot", title: "塞哥維亞城堡與草坪觀景台", desc: "朝聖「白雪公主城堡」的夢幻藍色屋頂原型。隨後一路下坡走到山腳下的 Pradera de San Marcos 大草坪，從這裡抬頭拍攝城堡全景，視覺震撼。", url: "Pradera+de+San+Marcos" },
-                { time: "19:00", type: "trans", title: "公車接駁返回高鐵站", desc: "在附近搭乘 9 號公車回到水道橋廣場，無縫轉乘 11 號公車返回高鐵站。搭乘 19:56 AVANT 34988 返回馬德里。", url: "Madrid+Chamartín+Station", PNR: "已訂票 · 19:56高鐵返程" }
-            ]
-        },
-        9: {
-            title: "馬德里 ➔ 托雷多 · 三面環河的三代伊斯蘭古都山城",
-            city: "托雷多 Toledo",
-            weather: "均溫 33°C",
-            icon: "fa-sun",
-            items: [
-                { time: "09:15", type: "trans", title: "高鐵出發前往托雷多", desc: "從馬德里 Atocha 車站搭高鐵 AVANT 08292 直達托雷多（34分鐘）。抵達後先欣賞車站絕美的摩爾式雕刻結構。", url: "Estación+de+Toledo", PNR: "已訂票 · 09:15開車" },
-                { time: "10:00", type: "trans", title: "計程車直奔山谷觀景台", desc: "出站直接全體跳上計程車，直奔對岸山頭的 Mirador del Valle。在這裡拍下三面環河、固若金湯的托雷多山城經典明信片全景。拍完再原車叫回索科多佛廣場。", url: "Mirador+del+Valle+Toledo" },
-                { time: "11:00", type: "food", title: "El Trébol 享用爆漿起司肉丸", desc: "叫車回廣場後，第一時間衝進巷弄名店 El Trébol 享用托雷多必吃招牌菜——外皮金黃、內餡濃郁爆漿的起司大肉丸（Bombas）。", url: "Cerveceria+El+Trebol", menu: "必點：招牌起司大肉丸 (Bombas)、精選 Tapas" },
-                { time: "12:15", type: "spot", title: "賽萬提斯雕像與聖十字博物館", desc: "飯後散步經過唐吉訶德作者賽萬提斯銅像，參觀由 16 世紀古老醫院改建、免費入場且中庭迴廊極美的聖十字博物館。", url: "Museum+of+Santa+Cruz" },
-                { time: "13:30", type: "spot", title: "托雷多城堡外觀與街頭小吃", desc: "走到雄偉的托雷多城堡外觀拍照（內部主要是軍事博物館可略過）。隨後沿路在 VIANDAS 買現切生火腿錐拿在手上吃，並到 Rey del Mazapán 買杏仁糖餅。", url: "Viandas+Toledo", gift: "Rey del Mazapán 百年杏仁糖餅 (Mazapán)" },
-                { time: "14:30", type: "spot", title: "托雷多大教堂 入內參觀", desc: "入內參觀這座耗時 260 多年打造、西班牙哥德式藝術的最高峰神殿，觀賞極盡華麗的唱詩班席與聖物室大師畫作。", url: "Toledo+Cathedral" },
-                { time: "16:30", type: "spot", title: "皇家聖胡安修道院 入內參觀", desc: "入內朝聖全西班牙最精緻、最美的火焰哥德式與穆德哈爾式雙層中庭迴廊，隨後漫步穿過古老的康布隆門。", url: "Monastery+of+San+Juan+de+los+Reyes" },
-                { time: "18:00", type: "spot", title: "聖馬丁橋日落與古城招牌燉肉", desc: "在古老的聖馬丁橋上觀賞塔霍河金色日落。隨後返回老店 Bar Ludeña 站在吧台點杯酒配招牌燉豬肉（Carcamusa），或去 Cervecería La Abadía 吃燉鹿肉。20:25搭高鐵返馬德里。", url: "Bar+Ludena", menu: "必吃：老味道燉豬肉 (Carcamusa)、燉鹿肉 (Stew)", PNR: "已訂票 · 20:25高鐵返程" }
-            ]
-        },
-        10: {
-            title: "馬德里 ➔ 格拉納達 · 墜入天方夜譚的摩爾阿拉伯老街",
-            city: "格拉納達 Granada",
-            weather: "均溫 35°C",
-            icon: "fa-sun",
-            items: [
-                { time: "07:20", type: "trans", title: "高鐵 AVE 前往格拉納達", desc: "搭高鐵 AVE 02076 橫跨安達魯西亞，11:05抵達格拉納達。出站搭4號公車至「大教堂站」下車，步行至 Hotel Inglaterra 放行李辦入住。", url: "Hotel+Inglaterra+Granada", PNR: "已訂票 · 07:20開車" },
-                { time: "12:30", type: "food", title: "Bar La Riviera / La Nueva Bodega", desc: "朝聖格拉納達最著名的慷慨傳統：點一杯冰啤酒或冷飲，老闆就大方招待一份免費精美 Tapas，高CP值吃到飽！", url: "Bar+La+Riviera+Granada", food: "點飲料送免費 Tapas 特色" },
-                { time: "14:30", type: "spot", title: "C. Calderería Nueva 阿拉伯老街", desc: "漫步在充滿水煙香氣、斑斕香料與阿拉伯燈飾的手工藝品老街，彷彿一秒穿越到中東摩洛哥市場。", url: "Calle+Caldereria+Nueva" },
-                { time: "16:00", type: "spot", title: "阿爾拜辛區與卡瓦哈列斯觀觀景台", desc: "穿梭在白色迷宮般的阿爾拜辛區古老巷弄，中途在小巧安靜的 Mirador Placeta de Carvajales 觀景點拍照小憩。", url: "Mirador+Placeta+de+Carvajales" },
-                { time: "19:30", type: "spot", title: "聖尼古拉斯觀觀景台 黃金落日", desc: "全城最熱門觀景台！坐在石牆上聽著吉他手彈奏佛朗明哥，靜靜欣賞夕陽餘暉將對面的阿爾罕布拉宮染成一片璀璨黃金的魔幻時刻。", url: "Mirador+de+San+Nicolas" },
-                { time: "21:00", type: "food", title: "Restaurante Oliver 晚宴", desc: "前往市區名店享用道地安達魯西亞海鮮或燉肉，回程散步順道拍攝夜晚點燈、充滿神祕感的大教堂與皇家禮拜堂立面。", url: "Restaurante+Oliver+Granada" },
-                { time: "23:00", type: "spot", title: "悲傷路 Paseo de los Tristes 散步", desc: "夜深微風徐徐，沿著達羅河畔著名的「悲傷路」悠閒散步，抬頭仰望夜空中被燈光點亮、巍峨矗立在懸崖上的阿爾罕布拉宮幽靜夜景。", url: "Paseo+de+los+Tristes" }
-            ]
-        },
-        11: {
-            title: "格拉納達 · 摩爾王朝終極伊斯蘭宮殿與靈魂佛朗明哥",
-            city: "格拉納達 Granada",
-            weather: "均溫 36°C",
-            icon: "fa-sun",
-            items: [
-                { time: "08:15", type: "trans", title: "搭乘 C30 紅色小巴上山", desc: "在伊莎貝拉廣場搭乘 C30 紅色巴士（€1.6），直接在「正義門（Puerta de la Justicia）」下車，這裡距離核心皇宮排隊區最近，最省力。", url: "Alhambra" },
-                { time: "09:00", type: "spot", title: "阿爾罕布拉宮 世紀深度參觀", desc: "朝聖伊斯蘭藝術的最高殿堂。核心重點：1. 納斯里皇宮（香桃木院、極繁複石膏雕刻與獅子庭園）、2. 阿爾卡薩巴要塞瞭望塔（鳥瞰全城）、3. 軒尼洛里菲夏宮花園。", url: "Alhambra", story: "極度嚴格限時入場，必須提早半小時在查理五世宮殿旁排隊！", PNR: "已訂票 · 預約 09:00納斯里皇宮" },
-                { time: "13:30", type: "food", title: "Bar los diamonds 現炸綜合海鮮", desc: "下山後直奔全城最狂的炸海鮮吧。站在吧台點餐，大口享用金黃酥脆、鮮甜多汁的現炸安達魯西亞綜合海鮮拼盤，配冰啤酒絕讚！", url: "Bar+Los+Diamantes+Plaza+Nueva", menu: "必點：酥炸綜合海鮮 (Pescaíto frito)" },
-                { time: "15:00", type: "spot", title: "飯店午休避暑 ➔ 吉拿棒一街下午茶", desc: "下午兩點到五點是一天當中最熱的熱浪時段，回飯店吹冷氣午休。傍晚前往 Bib-Rambla 廣場的 Gran Café Bib-Rambla，品嚐當地獨有、外酥內軟超有嚼勁的粗吉拿棒。", url: "Gran+Cafe+Bib-Rambla", menu: "必點體驗：波拉斯粗吉拿棒 (Porras)" },
-                { time: "19:15", type: "spot", title: "Tablao Flamenco Casa Ana 舞展", desc: "前往 Google 4.9 高分名店，在親密感十足的地下窯洞洞窟氛圍中，近距離朝聖節奏震撼、充滿歌者與舞者靈魂撕裂吶喊的安達魯西亞正宗佛朗明哥舞。", url: "Tablao+Flamenco+Casa+Ana", story: "表演時間一小時，利用 Booking 前幾天訂票即可。", PNR: "門票約 NT$661" }
-            ]
-        },
-        12: {
-            title: "格拉納達 ➔ 塞維亞 · 露台俯瞰與熱情河畔微風",
-            city: "格拉納達 ➔ 塞維亞",
-            weather: "均溫 38°C",
-            icon: "fa-sun",
-            items: [
-                { time: "12:48", type: "trans", title: "搭乘 AVANT 火車前往塞維亞", desc: "搭乘高鐵火車 AVANT 08525 班次，橫越南部平原。15:50 抵達塞維亞 Santa Justa 車站，出站直接4人合搭計程車（約2.5km）直達 Hotel Inglaterra 辦理入住。", url: "Hotel+Inglaterra+Seville", PNR: "已訂票 · 車廂 3 / 座位 09A-09D" },
-                { time: "16:30", type: "spot", title: "飯店 6 樓頂樓露台私房拍照", desc: "辦完入住，第一時間搭電梯上飯店 6 樓頂樓觀景露台，在這裡無人打擾地俯瞰整座新廣場與古老市政廳的壯麗尖頂。", url: "Hotel+Inglaterra+Seville" },
-                { time: "17:30", type: "spot", title: "塞維亞西班牙廣場與公園野餐", desc: "朝聖全西班牙最宏偉寬廣、帶有半圓形護城河與各省份瓷磚壁龕的西班牙廣場。隨後進旁邊的瑪麗亞路易莎公園大樹蔭下吹風野餐、避暑。", url: "Plaza+de+Espana+Seville" },
-                { time: "19:30", type: "spot", title: "河畔黃金塔黃昏散步", desc: "黃昏時分漫步至瓜達幾維河畔古老的「黃金塔」，看落日餘暉灑在波光粼粼的河面上，吹著微風非常舒服。", url: "Torre+del+Oro" },
-                { time: "20:30", type: "food", title: "伊莎貝拉二世橋與特里亞納夜生活", desc: "步行跨越西班牙最古老的世紀鐵橋，來到對岸的 Betis 景觀沿河街道。這裡入夜後整排露太座坐滿當地人，挑間酒館喝杯特產 Cruzcampo 冰啤酒配 Tapas 小點。", url: "Puente+de+Isabel+II" },
-                { time: "22:00", type: "food", title: "Al Wadi 阿拉伯奢華烤肉", desc: "晚餐享用極受好評的清真穆斯林風格烤肉料理。香氣四溢的香料烤肉串與中東烤餅，為完美的塞維亞第一晚收尾。", url: "Al+Wadi+Seville" }
-            ]
-        },
-        13: {
-            title: "塞維亞 · 多恩流水花園與抬棺哥倫布靈柩",
-            city: "塞維亞 Seville",
-            weather: "均溫 39°C",
-            icon: "fa-sun",
-            items: [
-                { time: "09:15", type: "spot", title: "塞維亞王宮 (提早排隊)", desc: "提早 15 分鐘抵達王宮宏偉的「獅子門（Puerta del León）」排隊。這座融合伊斯蘭與基督教的宮殿是《權力遊戲》多恩馬泰爾家族的流水花園拍攝地。", url: "Royal+Alcazar+of+Seville", story: "必看核心：少女中庭、使節廳（極度繁複浮湊的幾何星形木雕穹頂與立體石膏浮雕）。", PNR: "已訂票 · 預約 09:30入場" },
-                { time: "12:30", type: "food", title: "Calle Mateos Gago 景觀午餐", desc: "出宮殿後，直接來到正對著希拉達塔的露天餐廳大街。點幾杯冰鎮消暑的特產番茄冷湯（Salmorejo）配清爽的小點 Tapas，千萬別吃太撐。", url: "Calle+Mateos+Gago", menu: "必點消暑：安達魯西亞番茄冷湯 (Salmorejo)" },
-                { time: "14:30", type: "spot", title: "塞維亞大教堂與緩坡登希拉達塔", desc: "參觀世界第三大教堂。三大震撼點：1. 純金打造的世界最大木製黃金祭壇、2. 由四位國王抬棺、堅決不落地長眠的哥倫布靈柩、3. 沿著無樓梯的平緩斜坡盤旋登上希拉達塔頂，鳥瞰整座純白塞維亞老城。", url: "Seville+Cathedral", story: "當年不蓋樓梯是為了讓宣禮員可以帥氣地直接騎馬登頂哦！", PNR: "已訂票 · 預約 14:30入場" },
-                { time: "17:00", type: "spot", title: "聖十字區天然遮陰老巷弄探險", desc: "深入前猶太老城區，這裡的巷弄極度狹窄且九彎十八拐，是古人為了遮蔽盛夏烈日、保持涼爽的智慧結晶。穿梭其間防曬又好逛。", url: "Barrio+Santa+Cruz" },
-                { time: "19:00", type: "food", title: "Taberna Coloniales 平價 Tapas 王者", desc: "朝聖當地人瘋狂熱愛的平價排隊名店！菜單份量大、價格親民且美味爆表，大口享用烤章魚腳與威士忌豬里肌 Tapas。", url: "Taberna+Coloniales+Seville", food: "Taberna Coloniales" },
-                { time: "21:30", type: "food", title: "飯店 6 樓頂樓露台酒吧看夜景", desc: "夜幕低垂，回到 Hotel Inglaterra 頂樓露台酒吧，持飯店招待券點杯冰涼雞尾酒調酒，愜意欣賞前方大教堂與希拉達塔打上金色燈光的奢華夜景。", url: "Hotel+Inglaterra+Seville" }
-            ]
-        },
-        14: {
-            title: "塞維亞 ➔ 里斯本 · 飛越國界與神級海鮮飯插旗",
-            city: "塞維亞 ➔ 里斯本",
-            weather: "均溫 28°C",
-            icon: "fa-sun",
-            items: [
-                { time: "09:30", type: "spot", title: "都市陽傘 太空感高空步道", desc: "步行前往全球最大的全木造建築都市陽傘。上層景觀步道極具科幻未來感。逛完後13:30從飯店搭 Uber 前往塞維亞機場（SVQ，車程30分鐘）。", url: "Setas+de+Sevilla" },
-                { time: "16:15", type: "trans", title: "跨國航班 飛往葡萄牙里斯本", desc: "搭乘葡萄牙航空 TP1105 班次飛往里斯本（LIS T1）。注意兩國有一小時時差。16:20 降落後，4人直接叫 Bolt 快速直達市區飯店 Lisbon Art Stay 辦理入住。", url: "Lisbon+Art+Stay+Hotel+%26+Apartments", PNR: "已訂票 · 16:15班次" },
-                { time: "18:30", type: "food", title: "Uma Marisqueira 神級海鮮燉飯", desc: "開吃！放完行李立刻衝到飯店對面的傳奇神店排隊！大口享用湯汁濃郁鮮甜、塞滿螃蟹螯、大蝦與淡菜的「葡式濕海鮮燉飯」，好喝到幸福感爆棚！", url: "Uma+Marisqueira", food: "Uma Marisqueira 濕海鮮飯", menu: "招牌：葡式海鮮燉飯 (Arroz de Marisco)" },
-                { time: "20:00", type: "spot", title: "佩德羅四世廣場與百年櫻桃酒", desc: "經維修中的聖胡斯塔升降機外觀，來到黑白波浪地磚地標羅西歐廣場。隨後在百年老店 A Ginjinha 點一小杯 €1.5 的櫻桃酒站在路邊乾杯，體驗最純粹的里斯本社交。", url: "A+Ginjinha", menu: "傳統體驗：櫻桃酒 (Ginjinha)" },
-                { time: "21:15", type: "spot", title: "聖伯多祿花園夜景 ➔ 共濟會磁磚牆 ➔ 豬扒包", desc: "登上聖伯多祿花園觀景台拍攝經典夜景。隨後向下走到 Casa do Ferreira das Tabuletas 觀賞帶有共濟會神祕符號的滿版瓷磚外牆。最後到 O Trevo 買正宗豬扒包（Bifana）對切配 Super Bock 冰啤酒，經老書店晃回飯店。", url: "O+Trevo+Lisbon", menu: "必吃庶民美食：豬扒包 (Bifana)、Super Bock 冰啤酒" }
-            ]
-        },
-        15: {
-            title: "里斯本 · 百年大理石水柱與黃昏九重葛老城",
-            city: "里斯本 Lisbon",
-            weather: "均溫 27°C",
-            icon: "fa-sun",
-            items: [
-                { time: "08:30", type: "food", title: "頂級爆漿蛋塔早餐", desc: "早餐在飯店旁的 Fábrica da Nata 或 Manteigaria 解決.現烤出來外皮酥脆到像千層派、內餡蛋香濃郁爆漿的蛋塔，撒上肉桂粉庫存無敵！", url: "Manteigaria+Rua+Augusta", food: "Manteigaria 葡式蛋塔" },
-                { time: "09:30", type: "spot", title: "奧古斯塔街拱門與商業廣場", desc: "登上凱旋門拱門頂端觀景台，360度俯瞰龐巴爾下城。隨後穿過無邊際的商業廣場，走到河畔踩上昔日各國使節登陸、矗立在水中的兩根古老「大理石柱」。", url: "Arco+da+Rua+Augusta", PNR: "門票約 6 美金" },
-                { time: "12:00", type: "food", title: "Martinho da Arcada 文學鱈魚大餐", desc: "造訪拱廊下的百年文學餐廳（大導師佩索亞生前專屬座位店）。品嚐精緻講究的傳統龐巴爾風格馬介休鱈魚料理或豐厚多汁的葡式牛排。", url: "Martinho+da+Arcada", menu: "必點：馬介休鱈魚料理 (Bacalhau)、葡式牛排 (Bife)" },
-                { time: "14:30", type: "spot", title: "28 號電車與里斯本大教堂同框", desc: "漫步到古老的主教座堂前，架好相機。當經典的明黃色 28 號復古電車緩緩駛過石頂教堂前時，按下快門捕捉最代表里斯本的瞬間。", url: "Lisbon+Cathedral" },
-                { time: "15:30", type: "trans", title: "嘟嘟車直奔山上聖母觀觀景台", desc: "烈日午後防中暑省力密技！4人直接叫一台嘟嘟車或搭28號電車，直奔全城最高制高點——山上聖母觀景台。從這裡開始一路輕鬆下坡往下撿景點。", url: "Miradouro+da+Senhora+do+Monte" },
-                { time: "16:30", type: "spot", title: "阿爾法瑪舊城區下坡漫步", desc: "從最高點一路往下走，經過恩寵觀景台，漫步深入老宅縱橫、帶有歷史漫畫牆、充滿濃厚平民生活感的古老阿爾法瑪區。", url: "Alfama" },
-                { time: "18:30", type: "spot", title: "聖露西亞與太陽門觀觀景台 黃昏落日", desc: "坐在開滿艷麗九重葛與白色石柱的聖露西亞觀景台。一邊觀賞牆上描繪大地震前城市樣貌的藍白瓷磚畫，一邊看著夕陽漸漸將阿爾法瑪整片紅屋頂與海面染成粉紫色。晚餐找間有 Tasca 字樣的小酒館吃烤沙丁魚。", url: "Miradouro+de+Santa+Luzia", story: "觀景台牆上的磁磚畫非常珍貴，生動重現了 1755 年大地震前巍峨的王宮外觀哦！" }
-            ]
-        },
-        16: {
-            title: "里斯本 · 大航海時代榮光與航海羅盤地圖尋台",
-            city: "里斯本 · 貝倫區",
-            weather: "均溫 26°C",
-            icon: "fa-sun",
-            items: [
-                { time: "09:00", type: "trans", title: "4人合叫 Bolt 直奔貝倫區", desc: "防曬省時大絕招！四個人分攤計程車費比搭路面電車還便宜，15分鐘直接送到修道院大門口排隊。", url: "Jerónimos+Monastery" },
-                { time: "09:30", type: "spot", title: "熱羅尼莫斯修道院 黃金迴廊", desc: "入內參觀大航海曼紐埃爾式建築的巔峰。清晨陽光斜射進迴廊，石雕上的粗纜繩、珊瑚與海洋雕刻線條立體感最強、最美。10:30出來順遊隔壁聖瑪利亞教堂，瞻仰達伽馬之墓。", url: "Jerónimos+Monastery", story: "這裡滿滿的纜繩和貝殼石雕，都是當年用香料稅打造、歌頌大航海時代的輝狂哦！", PNR: "已訂票 · 預約 09:30入場" },
-                { time: "11:15", type: "food", title: "Pastéis de Belém 世界首家蛋塔店", desc: "走到這間自 1837 年營業至今、全世蛋塔的發源創始總店。內用人潮可怕，直接排「外帶區」速度極快，買一盒元祖大航海蛋塔在路邊撒上肉桂粉和糖粉享用。", url: "Pasteis+de+Belem", food: "Pastéis de Belém 創始蛋塔" },
-                { time: "12:00", type: "spot", title: "發現者紀念碑 尋找臺灣", desc: "高聳入雲的卡拉維爾帆船造型紀念碑（登頂可鳥瞰貝倫全景）。下來後在廣大的大理石世界航海羅盤地圖上，細心尋找臺灣 🇹🇼 的古老足跡合照！", url: "Padrão+dos+Descobrimentos", PNR: "門票約 NT$625" },
-                { time: "14:30", type: "spot", title: "貝倫塔外觀與印度犀牛石雕", desc: "走到佇立在河畔、守護防衛港口的防禦堡壘（外面拍照即可）。仔細尋找塔身外牆上，雕刻於 1515 年、當時轟動全歐洲的「第一隻印度犀牛」精緻石雕。", url: "Torre+de+Belem" },
-                { time: "16:00", type: "food", title: "Time Out Market 或 Formosa 台菜晚餐", desc: "傍晚可以去超大型文創美食市場 Time Out Market 逛逛，或者如果想念家鄉味，強烈推薦前往溫馨精緻的台式餐館 Formosa Principe Real 吃頓道地家鄉菜安撫胃袋。", url: "Formosa+Principe+Real" }
-            ]
-        },
-        17: {
-            title: "里斯本 ➔ 辛特拉 · 撞色童話城堡與陸止於此海始於斯",
-            city: "辛特拉 ➔ 羅卡角",
-            weather: "均溫 24°C",
-            icon: "fa-wind",
-            items: [
-                { time: "09:00", type: "trans", title: "搭火車前往辛特拉老城", desc: "自 Rossio 車站搭乘火車直達辛特拉（40分鐘，刷 Zapping）。09:50 出站後免去排公車長龍，4人直接快速叫台計程車直奔佩納宮花園大門。", url: "Park+and+National+Palace+of+Pena" },
-                { time: "10:30", type: "trans", title: "搭乘雙程接駁車上山", desc: "抵達大門口後，直接憑套票搭乘園區雙程接駁車直達半山腰的城堡入口，保留體力。必須在 11:00 前抵達佩納宮核心入口。", url: "Park+and+National+Palace+of+Pena" },
-                { time: "11:00", type: "spot", title: "佩納宮 夢幻童話撞色城堡", desc: "入內參觀這座國王打造、大膽採用鮮艷黃紅撞色、融合伊斯蘭與文藝復興曼紐埃爾風格的魔幻高山宮殿。", url: "Park+and+National+Palace+of+Pena", PNR: "已訂票含接駁 · 預約 11:00" },
-                { time: "13:00", type: "spot", title: "摩爾人城堡 攀登高山長城", desc: "步行5分鐘前往隔壁大門。攀登蜿蜒在險峻山脊上的千年中世紀摩爾人古長城，風大險峻，頂端可以 360 度鳥瞰整片大西洋地平線。", url: "Castle+of+the+Moors", PNR: "門票約 14 美金" },
-                { time: "14:30", type: "food", title: "Bacalhau na Vila 鱈魚創意盛宴", desc: "叫計程車下山回到辛特拉小鎮，在極受好評的設計感餐館品嚐各式精緻有創意的百變鱈魚馬介休料理，美味驚艷。", url: "Bacalhau+na+Vila", menu: "精緻創意：各式百變鱈魚料理" },
-                { time: "16:00", type: "food", title: "百年餅店雙絕 ➔ 酥脆蛋塔", desc: "朝聖小鎮百年名店 Casa Piriquita，點一份內餡豐厚、帶有杏仁香氣的招牌枕頭酥（Travesseiro）與乳酪塔（Queijada）配義式濃縮咖啡。隨後再去 Fábrica da Nata 補一顆外皮脆到極致的清脆蛋塔。", url: "Casa+Piriquita", menu: "必吃百年雙絕：枕頭酥 (Travesseiro)、乳酪塔 (Queijada)" },
-                { time: "17:30", type: "trans", title: "計程車直奔歐洲大陸最西端 羅卡角", desc: "4人叫計程車（30分鐘）直奔世界的盡頭——羅卡角。站在陡峭的懸崖邊，與十字架石碑合照，默念詩人著名的史詩：『陸止於此、海始於斯』。", url: "Cabo+da+Roca" },
-                { time: "19:00", type: "food", title: "卡斯凱什渡假海岸 ➔ 海濱火車返程", desc: "叫 Uber 前往富豪渡假勝地 Cascais 小鎮，在金黃色沙灘旁的海鮮餐廳一邊吃晚餐一邊觀賞日落。最後在車站刷 Zapping（€2）搭乘愜意的沿海鐵路火車舒舒服服返回里斯本。", url: "Cascais" }
-            ]
-        },
-        18: {
-            title: "里斯本 ➔ 波多 · 驚艷藍白花磚之城與大橋黃金萬家燈火",
-            city: "里斯本 ➔ 波多",
-            weather: "均溫 25°C",
-            icon: "fa-sun",
-            items: [
-                { time: "09:00", type: "trans", title: "搭乘葡萄牙 AP 高鐵前往波多", desc: "自飯店搭 Uber 前往 Santa Apolónia 車站，搭乘國鐵高鐵最高級 AP 列車前往波多 Campanhã 站（2小時50分）。11:48抵達後叫車前往旅館辦理入住。", url: "Mercure+Porto+Centro+Santa+Catarina", PNR: "已訂高鐵票 · 現場另付城市稅約25.6歐" },
-                { time: "12:30", type: "spot", title: "第一站：聖伊爾德豐索堂", desc: "Check-in 完畢出發！率先散步至這座宏偉教堂前，解鎖大廳正面由萬片經典藍白花磚鋪滿的壯麗立面，這是波多的花磚初體驗。", url: "Church+of+Santo+Ildefonso" },
-                { time: "13:00", type: "food", title: "第二站：Café Santiago 挑戰濕搭搭三明治", desc: "前往全城最火紅的傳奇老店，挑戰著名的熱量炸彈「Francesinha 濕搭搭三明治」。內夾牛排、火腿、香腸，外覆滿滿熔岩起司，最後淋上祕製微辣啤酒醬汁。份量極大，四人點兩份對切分享最剛好！", url: "Cafe+Santiago+Porto", food: "Café Santiago 濕搭搭三明治", menu: "必點名物：濕搭搭三明治 (Francesinha)" },
-                { time: "14:00", type: "food", title: "第三站：Majestic Café 百年貴族咖啡館", desc: "吃飽後散步至名列「世界十大最美咖啡館」第六名的奢華聖地。內部水晶吊燈與雕刻奢華古典，進來拍照、喝杯熱咖啡，享受舊時代歐洲貴族的優雅氣氛。", url: "Majestic+Cafe+Porto" },
-                { time: "14:40", type: "spot", title: "阿瑪斯教堂 (聖靈教堂) 滿版花磚牆", desc: "朝聖全波多最震撼、外牆完全被滿滿藍白歷史史詩花磚全面覆蓋的聖靈教堂，這是網美必拍的經典視覺大作！", url: "Chapel+of+Souls" },
-                { time: "15:30", type: "spot", title: "傳統市場巡禮與高CP值紀念品採買", desc: "在超好買的 TIP TOP souvenirs 橫掃高 CP 值的葡萄牙特色紀念品、軟木手工藝。隨後走進乾淨明亮的 Mercado do Bolhão 傳統傳統市場感受在地日常情調。", url: "Tip+Top+Souvenirs+Porto" },
-                { time: "16:30", type: "food", title: "ViaCatarina Shopping ➔ Conga 辣醬豬扒包", desc: "逛街並利用購物中心頂樓美食街的乾淨免費廁所。隨後到 Conga eat 醬汁更辣、肉質更濕潤鮮嫩的「波多風格辣豬扒包」，非常過癮！", url: "O+Conga+Porto", menu: "波多風味：Conga 辣醬豬扒包" },
-                { time: "18:00", type: "spot", title: "帝國麥當勞與聖本托史詩車站", desc: "經巨型 PORTO 字樣，參觀帶有奢華大鷹雕刻的帝國麥當勞。隨後步入全世最美火車站——聖本托車站，大廳由兩萬片藍白花磚描繪的葡萄牙戰役史詩牆令人嘆為觀止。", url: "Sao+Bento+Station" },
-                { time: "20:00", type: "spot", title: "路易一世大橋 (上層) ➔ 聖皮拉爾修道院明信片夜景", desc: "在車站旁買顆 Fábrica da Nata 蛋塔，慢步走上雄偉的路易一世大橋上層鐵橋步道。一路步行至加亞新城的 Miradouro da Serra do Pilar 修道院前廣場。在這裡卡位捕捉整座雙層大橋與杜羅河畔兩岸黃金萬家燈火點亮、震撼全世界的殿堂級夜景！", url: "Miradouro+da+Serra+do+Pilar" }
-            ]
-        },
-        19: {
-            title: "波多 · 杜羅河畔彩色糖果屋與最美紫紅海面日落",
-            city: "波多 Porto",
-            weather: "均溫 26°C",
-            icon: "fa-sun",
-            items: [
-                { time: "08:30", type: "food", title: "Breakfast Lovers São Bento 網美早餐", desc: "在車站旁的超人氣早午餐店享用高顏值網美擺盤、精緻美味的手工烘焙與咖啡，悠閒開啟大晴天的一天。", url: "Breakfast+Lovers+Sao+Bento" },
-                { time: "09:30", type: "spot", title: "卡爾莫教堂順光花磚 ➔ 萊羅書店與教士塔外觀", desc: "朝聖卡爾莫教堂，其側牆大片精美藍白瓷磚壁畫在早晨陽光照射下完全順光，色澤最唯美。隨後順路經過萊羅書店外觀、教士塔外觀拍照，避開可怕的排隊人潮。", url: "Igreja+do+Carmo+Porto" },
-                { time: "11:00", type: "spot", title: "浪漫花街與波多大教堂古典花磚中庭", desc: "漫步在精品林立、充滿文藝氛圍的花街。經 Miradouro da Vitória 免費觀景台，前往高聳的波多大教堂入內參觀，朝聖內部保存極其完好、帶有精美雕刻與花磚的古典中庭迴廊。", url: "Porto+Cathedral" },
-                { time: "13:00", type: "spot", title: "吉卜力彩色小廣場與斑駁老階梯探險", desc: "深入隱密的舊城核心：擁有繽紛撞色外牆、極具吉卜力動畫既視感的 Largo da Pena Ventosa 迷你廣場；隨後穿梭至 Escadas do Barredo 斑駁古老階梯，這裡充滿晾衣架與神祕轉角，帶有最地道的老波多生活感。", url: "Largo+da+Pena+Ventosa" },
-                { time: "14:30", type: "spot", title: "里貝拉碼頭散步區 (世界文化遺產)", desc: "來到杜羅河畔著名的 Cais da Ribeira 碼頭。漫步欣賞沿岸整排緊密相連、五彩繽紛的世界文化遺產老房子，非常有河畔情調。", url: "Cais+da+Ribeira" },
-                { time: "16:00", type: "spot", title: "跨越大橋下層 ➔ 加亞新城河畔瘋狂拍照", desc: "邁開步伐，從路易一世大橋的「下層鐵橋步道」跨越杜羅河，來到對岸的加亞新城。以河對岸整排里貝拉碼頭彩色糖果屋為完美背景，拍攝最具代表性的波多大合照。", url: "Luis+I+Bridge" },
-                { time: "17:30", type: "trans", title: "加亞河畔單程纜車 ➔ 莫羅花園紫紅色殿堂落日", desc: "在碼頭旁購買單程纜車票（€7），舒適地搭乘 Gaia Cable Car 纜車一路爬升至高處的莫羅花園（Jardim do Morro）。坐在大草皮上聽著街頭藝人彈唱吉他，卡位朝聖全世界最著名的黃昏：看著夕陽緩緩西沉入大西洋，將整座大橋、杜羅河與彩色古城全部染成極度不可思議的夢幻粉紫色。晚餐在加亞碼頭吃露天海鮮，餐後直接高效率叫 Uber 返回飯店休息。", url: "Jardim+do+Morro", PNR: "纜車票 7 歐元" }
-            ]
-        },
-        20: {
-            title: "波多 ➔ 馬德里 · 傳奇酒莊三杯連喝與重返西班牙",
-            city: "波多 ➔ 馬德里",
-            weather: "均溫 32°C",
-            icon: "fa-sun",
-            items: [
-                { time: "10:30", type: "food", title: "早餐墊胃 ➔ Sandeman 傳奇酒莊專業導覽", desc: "【方案A微醺】一定要先吃點東西墊胃！11:00 前往杜羅河畔大名鼎鼎的黑斗篷 Sandeman 酒莊。進行 50 分鐘的專業製程與地窖導覽，最後在奢華品酒室『連續痛快品嚐三杯不同年份、香甜濃郁但後勁極強的頂級加烈波特酒』！【方案B】不喝酒者可在 Zenith Brunch & Cocktails 睡到飽吃超澎湃網美早午餐加逛街補貨。13:30 四人叫 Uber 直奔波多機場（OPO，車程25分鐘）。", url: "Sandeman+Porto", story: "波特酒Port Wine是加烈葡萄酒，酒精濃度高達19%-20%，空腹喝三杯很容易醉哦，務必墊胃！", PNR: "酒莊導覽約 23 歐元" },
-                { time: "16:05", type: "trans", title: "跨國航班 飛回馬德里機場 T2", desc: "搭乘跨國飛機航班起飛，18:15 順利降落馬德里巴拉哈斯機場 T2。出站後直接叫計程車，前往今晚位於 Valdebebas 全新落成的高級住宅型公寓式酒店辦理入住。", url: "Be+Casa+Valdebebas", PNR: "已訂房 · 2間高級開放式公寓" },
-                { time: "19:30", type: "spot", title: "公寓式飯店奢華放鬆與主廚晚餐", desc: "體驗這間 Google 4.8 超高分新特區公寓。利用房間內極具設計感、現代北歐風的豪華全套廚房設備，四人一起溫馨下廚煮晚餐、享用美酒，在舒適寬敞的沙發空間好好放鬆，為完美的 22 天西葡圓夢長征舉行慶功尾聲！", url: "Be+Casa+Valdebebas" }
-            ]
-        },
-        21: {
-            title: "馬德里出發 ✈️ 歐盟退稅與踏上返台歸途",
-            city: "馬德里 ➔ 阿布達比",
-            weather: "均溫 33°C",
-            icon: "fa-sun",
-            items: [
-                { time: "07:30", type: "trans", title: "退房並計程車直達機場 T4", desc: "公寓飯店退房後直接叫車前往馬德里機場 T4 航廈（距離非常近）。08:00 抵達後第一時間辦理阿提哈德航空行李託運、登機，並預留充足時間至海關蓋章機辦理歐盟海關退稅。", url: "Adolfo+Suárez+Madrid–Barajas+Airport", PNR: "已出票 · 10:45高鐵/航班起飛" },
-                { time: "10:45", type: "trans", title: "阿提哈德航空 EY102 起飛", desc: "搭乘 EY102 班次，舒適地飛離歐洲大陸。預計 19:40 降落阿布達比國際機場 A 航廈。於航廈內更換登機門並進行轉機手續。", url: "Zayed+International+Airport" },
-                { time: "21:20", type: "trans", title: "阿提哈德航空 EY898 返台班機", desc: "換機搭乘 EY898 最終航線，橫跨亞洲夜空，在飛機上好好睡一覺、調整時差，舒適返回家園。", url: "Zayed+International+Airport" }
-            ]
-        }
+        2: { title: "巴塞隆納 · 不和諧街區與高第初體驗", city: "巴塞隆納 Barcelona", weather: "31°C", icon: "fa-sun", items: [
+            { time: "07:35", type: "trans", title: "抵達巴塞隆納機場 T1", desc: "通關後搭機場巴士 Aerobús A1 至加泰隆尼亞廣場，步行 5 分鐘抵達 HCC Montblanc 辦理放行李。", url: "Josep+Tarradellas+Barcelona-El+Prat+Airport", story: "持高鐵AVE車票者今天可免費兌換轉乘近郊鐵路Rodalies哦！", PNR: "機票已結清" },
+            { time: "11:30", type: "spot", title: "漫步不和諧街區", desc: "漫步在格拉西亞大道，欣賞建築巨匠們並排炫技的驚艷立面。上午順光，非常適合拍照。", url: "Manzana+de+la+Discordia", story: "這條街區因為有三棟風格迴異的豪宅並列而得名，走在馬路中島拍攝最壯觀！", gift: "阿馬特耶之家 / 莫雷拉之家" },
+            { time: "13:00", type: "spot", title: "巴特婁之家 (入內參觀)", desc: "高第以海洋奇幻為靈感的巨作。骨骼狀的柱子與面具陽台充滿魔幻感。", url: "Casa+Batllo", story: "陽光穿透中庭藍色瓷磚時光影美得像深海。", PNR: "已訂銀色票 · 預約 13:00" },
+            { time: "15:00", type: "food", title: "Tapa Tapa Passeig de Gràcia", desc: "在不和諧街區旁享用精緻豐富的西班牙小點（Tapas），簡單速吃首選。", url: "Tapa+Tapa+Passeig+de+Gracia", menu: "經典單品：經典番茄麵包、現炸小章魚" },
+            { time: "16:30", type: "spot", title: "米拉之家 (外觀拍照)", desc: "欣賞外牆如波浪般流暢起伏的石材立面。下午時段正面順光，拍照線條立體感十足。", url: "Casa+Mila", story: "這是高第設計的最後一棟私人住宅，屋頂的煙囪像外星武士！" },
+            { time: "18:00", type: "food", title: "英國宮百貨頂樓 LA PLAÇA", desc: "在百貨頂樓美食街一邊享用異國午晚餐，一邊俯瞰加泰隆尼亞廣場的繁華全景。", url: "El+Corte+Ingles+Placa+de+Catalunya" },
+            { time: "20:30", type: "spot", title: "加泰隆尼亞音樂宮 (夜景)", desc: "散步至音樂宮外部，拍攝夜晚打燈後，彩繪玻璃與精緻雕刻在夜色中交織的華麗姿態。", url: "Palau+de+la+Musica+Catalana" }
+        ]},
+        3: { title: "巴塞隆納 · 世紀巨作聖家堂與黃昏奎爾公園", city: "巴塞隆納 Barcelona", weather: "30°C", icon: "fa-sun", items: [
+            { time: "08:30", type: "spot", title: "聖家堂水池倒影拍攝", desc: "一早先前往聖家堂東面的高第公園，捕捉清晨順光下，聖家堂與水池完美同框的倒影。", url: "Placa+de+Gaudis+pond" },
+            { time: "09:00", type: "spot", title: "聖家堂 入內參觀", desc: "親臨神級建築神殿，觀賞陽光穿透彩色玻璃窗在森林石柱上渲染出的天堂奇景。", url: "Basílica+de+la+Sagrada+Familia", story: "這是一棟蓋了百年的上帝建築。記得下載官方APP使用語音導覽。", PNR: "已訂票 · 預約 09:00入場" },
+            { time: "09:45", type: "spot", title: "登受難立面塔頂", desc: "搭乘電梯直達高空，近距離觀賞建築頂端的果實雕刻，並鳥瞰巴塞隆納棋盤式市景。", url: "Basílica+de+la+Sagrada+Familia", PNR: "已訂票 · 預約 09:45登塔" },
+            { time: "12:30", type: "food", title: "高第大道避暑午餐", desc: "在熱鬧的高第大道上挑選一間露天餐廳吃中餐，喝杯冰咖啡或享用 Gelato 眺望聖家堂。", url: "Avinguda+de+Gaudi", food: "必吃：高第大道手工義式冰淇淋" },
+            { time: "16:30", type: "trans", title: "搭乘 Uber 前往奎爾公園", desc: "4人同行省力首選！直接搭車到奎爾公園最上方的側門（Ctra. del Carmel）進去，一路下坡最輕鬆。", url: "Park+Guell" },
+            { time: "17:00", type: "spot", title: "奎爾公園 入場參觀", desc: "漫步高第的童話花園。看點：石頭長廊、波浪石椅露台（俯瞰糖果屋經典明信片照與大海）、龍噴泉蜥蜴。", url: "Park+Guell", story: "下午陽光灑在馬賽克拼貼瓷磚上色彩最飽和、最順光！", PNR: "已訂票 · 預約 17:00" },
+            { time: "20:00", type: "spot", title: "聖家堂黃昏外觀補拍", desc: "回程再次經過聖家堂，補拍在夕陽餘暉與夜間點燈下，與白天截然不同的神聖外觀。", url: "Basílica+de+la+Sagrada+Familia" }
+        ]},
+        4: { title: "巴塞隆納 · 哥德區老城悠閒漫步", city: "巴塞隆納 Barcelona", weather: "32°C", icon: "fa-cloud-sun", items: [
+            { time: "09:30", type: "spot", title: "加泰隆尼亞音樂宮 入內參觀", desc: "欣賞現代主義大師多明尼克的顛峰巨作。陽光穿透倒懸的彩色玻璃穹頂時，宛如巨大的魔幻寶石。", url: "Palau+de+la+Musica+Catalana", PNR: "已訂票 · 中文語音導覽 50分鐘" },
+            { time: "11:00", type: "spot", title: "哥德區古城探險", desc: "漫步至巴塞隆納主教座堂外拍，並前往網美必拍、精緻典雅的「嘆息橋」留下合影。", url: "Pont+del+Bisbe", story: "歷史老城區巷弄昏暗，是扒手黃金熱區，包包一定要背前面！" },
+            { time: "12:00", type: "food", title: "老字號點心時光", desc: "造訪百年老店 Granja M. Viader，體驗極濃郁的熱巧克力沾現炸酥脆吉拿棒。順路買 Amorino 浪漫花瓣冰淇淋。", url: "Granja+M.+Viader", food: "Granja M. Viader", menu: "濃情熱巧克力配吉拿棒 (Churros)" },
+            { time: "12:45", type: "food", title: "El Quim de la Boquería", desc: "位於聖約瑟市場內的超火紅傳奇海鮮攤位。當地人極度熱愛，務必提早抵達卡位。", url: "El+Quim+de+la+Boqueria", menu: "必點：招牌橄欖油雙煎蛋佐小章魚 (Baby Squid with Eggs)" },
+            { time: "14:30", type: "spot", title: "蘭布拉大道逛街", desc: "沿著繁華大道散步，途經奎爾宮外觀，尋找 Casa Bruno Cuadros 建築上提著吊燈的東方龍雕刻。", url: "Casa+Bruno+Cuadros" },
+            { time: "16:00", type: "spot", title: "哥倫布紀念塔與貝爾港", desc: "向南漫步至矗立在海濱的哥倫布塔，隨後沿著藍天碧海的貝爾港木棧道往東散步，吹海風消暑。", url: "Port+Vell" },
+            { time: "17:30", type: "spot", title: "海洋聖母聖殿", desc: "造訪知名影集拍攝地。由當年的碼頭工人一磚一瓦合力蓋成，堪稱巴塞隆納的「海神媽祖廟」。", url: "Basilica+of+Santa+Maria+del+Mar" },
+            { time: "19:00", type: "spot", title: "凱旋門與城堡公園", desc: "朝聖 1888 年世界博覽會的宏偉紅磚入口拱門，漫步進城堡公園享受悠閒的傍晚時光。", url: "Arc+de+Triomf" }
+        ]},
+        5: { title: "巴塞隆納 ➔ 馬德里 · 醫院與高鐵移動", city: "巴塞隆納 ➔ 馬德里", weather: "34°C", icon: "fa-sun", items: [
+            { time: "09:30", type: "spot", title: "聖十字聖保羅醫院", desc: "參觀這座被譽為「世界上最美醫院」的世界文化遺產。重點參觀行政大樓內部，粉嫩的馬賽克與拱頂美如宮殿。", url: "Recinte+Modernista+de+Sant+Pau", PNR: "已訂票 · 09:30場次中文導覽" },
+            { time: "13:40", type: "trans", title: "前往 Sants 高鐵車站", desc: "從飯店出發至加泰隆尼亞廣場站，搭近郊鐵路 Rodalies（掃高鐵票 QR Code 可免費搭乘）前往高鐵站。14:15抵達，預留時間行李安檢。", url: "Barcelona-Sants" },
+            { time: "15:00", type: "trans", title: "搭乘 AVE 高速列車前往馬德里", desc: "搭乘 Renfe AVE 03152 高鐵，直達馬德里。預計 18:17 抵達 Madrid Puerta de Atocha。出站後步行至對面 Hotel Mediodia 辦理入住。", url: "Hotel+Mediodia", PNR: "已訂票 · 車廂 6 / 座位 09A-10B" },
+            { time: "19:00", type: "food", title: "100 Montaditos (飯店隔壁)", desc: "連鎖國民小吃小酒館。點幾款 Montaditos 迷你法棍小三明治，配上一杯清涼解渴的 Tinto de Verano（紅酒加汽水）。", url: "100+Montaditos+Princesa" },
+            { time: "20:00", type: "spot", title: "麗池公園與阿爾卡拉門", desc: "漫步至馬德里綠肺麗池公園，觀賞巍峨的阿方索十二世紀念碑。回程經過阿爾卡拉門，觀察上面的對稱古砲彈痕跡。", url: "El+Retiro+Park" },
+            { time: "21:00", type: "food", title: "La Barraca 正宗西班牙燉飯", desc: "造訪西貝萊斯廣場（大地女神噴泉）旁的老字號飯館，品嚐正宗厚實的華麗瓦倫西亞燉飯（Paella）。", url: "La+Barraca+Madrid", story: "極度熱門的名店，一定要提早預約喔！" }
+        ]},
+        6: { title: "馬德里 · 普拉多藝術殿堂與限定跳蚤市場", city: "馬德里 Madrid", weather: "35°C", icon: "fa-sun", items: [
+            { time: "09:45", type: "spot", title: "普拉多美術館", desc: "提早前往赫羅尼莫斯入口排隊。館內禁止拍照，請靜心享受世界三大博物館的藝術震撼。", url: "Prado+Museum", story: "鎮館三寶必看：維拉斯奎茲《侍女》、哥雅《1808年5月3日》、波希《人間樂園》。", PNR: "已訂票 · 10:00場次含語音導覽" },
+            { time: "13:30", type: "spot", title: "太陽門廣場", desc: "馬德里的正中心。尋找西班牙公路網起點的「零公里座標」石碑，並與經典地標「熊與莓果樹銅像」拍照。", url: "Puerta+del+Sol" },
+            { time: "14:00", type: "food", title: "老城鱈魚小吃與甜餅", desc: "到百年糕點店 La Mallorquina 買熱騰騰的拿坡里甜餅，再到旁邊傳奇小店 Casa Labra 站吧台吃金黃酥脆的現炸鱈魚塊。", url: "Casa+Labra", menu: "必點：炸鱈魚塊 (Tajada de Bacalaau)、拿坡里甜餅" },
+            { time: "14:40", type: "food", title: "馬德里主廣場與炸魷魚三明治", desc: "漫步進被紅磚建築包圍的宏偉主廣場。前往名店 La Campana 買一份外酥內軟、塞滿現炸魷魚圈的三明治，坐在拱門下享用。", url: "La+Campana+Madrid", food: "La Campana 炸魷魚三明治" },
+            { time: "15:20", type: "spot", title: "El Rastro 露天跳蚤市場", desc: "從主廣場往南走，趕在收攤前朝聖歐洲最大的露天跳蚤市場，感受最地道的馬德里市集尾聲魅力。", url: "El+Rastro" },
+            { time: "16:30", type: "food", title: "聖米格爾市場 Tapas 大快朵頤", desc: "玻璃鋼骨架結構的高檔美食市場。點幾款奢華的生火腿、海鮮 Tapas。利用消費收據可以免費使用地下室乾淨廁所。", url: "Mercado+de+San+Miguel" },
+            { time: "18:00", type: "spot", title: "市政廳廣場", desc: "漫步造訪巴洛克式古老市政廳，欣賞環繞廣場、橫跨三個不同世紀的優雅古老建築群。", url: "Plaza+de+la+Villa" },
+            { time: "21:00", type: "food", title: "100 Montaditos (週日瘋狂優惠)", desc: "週日限定超級特惠！店內幾乎所有口味的 Montaditos 迷你三明治通通只要 €1，炸物點心拼盤只要 €2，CP值破天際！", url: "100+Montaditos+Princesa" }
+        ]},
+        7: { title: "馬德里 · 皇家宮殿與埃及神殿日落", city: "馬德里 Madrid", weather: "36°C", icon: "fa-sun", items: [
+            { time: "08:30", type: "food", title: "Chocolatería San Ginés", desc: "朝聖馬德里最傳奇的吉拿棒老店。像當地人一樣帥氣地站在吧台點餐享用，價格比座位區還便宜哦！", url: "Chocolatería+San+Gines", menu: "必點：香濃黑巧克力沾吉拿棒、檸檬冰沙 (消暑聖品)" },
+            { time: "09:30", type: "food", title: "Museo del Jamón (火腿博物館)", desc: "極具視覺震撼的火腿專賣店，天花板掛滿密密麻麻的火腿，點份平價現切伊比利生火腿三明治當二輪早餐。", url: "Museo+del+Jamon" },
+            { time: "10:30", type: "spot", title: "阿穆德納聖母主教座堂", desc: "新哥德式宏偉教堂（免費參觀）。走到旁邊的小山丘上，可以拍到主教座堂與隔壁皇宮大同框的經典宏偉構圖。", url: "Almudena+Cathedral" },
+            { time: "11:30", type: "spot", title: "馬德里皇宮與東方廣場", desc: "拍攝歐洲最奢華皇宮之一的壯麗外觀。漫步到前方的東方廣場，近距離觀察全球首座「前腳懸空」的國王馬術青銅雕像。", url: "Plaza+de+Oriente", story: "可以坐在老派的 Café de Oriente 戶外雅座點杯冷飲，欣賞街頭藝人表演。" },
+            { time: "15:30", type: "food", title: "Mallorca Pastelería 下午茶避暑", desc: "正午酷熱時段，躲進精品級甜點店，享用源自馬約卡島的傳統螺旋甜麵包，配上一杯冰涼的咖啡牛奶。", url: "Pasteleria+Mallorca", menu: "必點：螺旋甜麵包 (Ensaimada) 、咖啡牛奶 (Café con Leche)" },
+            { time: "18:30", type: "spot", title: "西班牙廣場與 Riu Hotel 360°觀景台", desc: "先與唐吉訶德和桑丘的青銅雕像合照。隨後登上 Riu 飯店 27 樓頂樓觀景台，挑戰驚險的「全透明玻璃天橋」，360度俯瞰馬德里震撼全景。", url: "360+Rooftop+Bar+Riu+Plaza+Espana" },
+            { time: "21:00", type: "spot", title: "德波神殿 埃及古蹟日落", desc: "由埃及政府贈送的兩千年正統古埃及神殿。提早前來卡位，靜靜等待 21:30 - 21:48 期間，神殿在水中倒影與粉紫色晚霞交織的绝美奇景。", url: "Templo+de+Debod" }
+        ]},
+        8: { title: "馬德里 ➔ 塞哥維亞 · 水道橋與脆皮烤乳豬", city: "塞哥維亞 Segovia", weather: "29°C", icon: "fa-sun", items: [
+            { time: "08:30", type: "trans", title: "高鐵出發前往查馬丁站", desc: "自 Atocha 車站搭通勤火車 Cercanías 至 Chamartín 車站，安檢後搭乘高鐵 AVANT 34763 班次前往塞哥維亞 Guiomar 高鐵站。", url: "Madrid+Chamartín+Station", PNR: "已訂票 · 09:25高鐵開車" },
+            { time: "10:00", type: "trans", title: "轉乘 11 號巴士直達水道橋", desc: "出高鐵站直接轉乘 11 號接駁公車（車程15分鐘）直達地標羅馬水道橋廣場，抬頭仰望兩千年無水泥榫接的宏偉引水古橋。", url: "Aqueduct+of+Segovia" },
+            { time: "13:00", type: "food", title: "Mesón de Cándido 脆皮烤乳豬", desc: "水道橋旁的百年傳奇總店！朝聖世紀名廚以瓷盤切乳豬、隨後砸碎瓷盤的傳統儀式，大口品嚐皮脆肉嫩、入口即化的神級烤乳豬。", url: "Meson+De+Candido", food: "Mesón de Cándido 烤乳豬", PNR: "已預約 13:00 用餐" },
+            { time: "15:00", type: "food", title: "聖馬丁教堂與百年甜點 Ponche", desc: "散步經過古老聖馬丁教堂，造訪名店 Limón y menta 購買塞哥維亞代表性甜點 Ponche，配冰咖啡絕配。", url: "Limon+y+Menta", menu: "名產甜點：Ponche 蛋糕、Crocantinos 冰淇淋" },
+            { time: "16:30", type: "spot", title: "古城牆步道攀登", desc: "前往聖安德烈門旁的旅遊資訊中心（Espacio Muralla）購票登上古老城牆，漫步步道俯瞰城外翠綠的深邃山谷與遠方城堡。", url: "Muralla+de+Segovia" },
+            { time: "17:30", type: "spot", title: "塞哥維亞城堡與草坪觀景台", desc: "朝聖「白雪公主城堡」的夢幻藍色屋頂原型。隨後一路下坡走到山腳下的 Pradera de San Marcos 大草坪，從這裡抬頭拍攝城堡全景，視覺震撼。", url: "Pradera+de+San+Marcos" },
+            { time: "19:00", type: "trans", title: "公車接駁返回高鐵站", desc: "在附近搭乘 9 號公車回到水道橋廣場，無縫轉乘 11 號公車返回高鐵站。搭乘 19:56 AVANT 34988 返回馬德里。", url: "Madrid+Chamartín+Station", PNR: "已訂票 · 19:56高鐵返程" }
+        ]},
+        9: { title: "馬德里 ➔ 托雷多 · 伊斯蘭古都山城一日遊", city: "托雷多 Toledo", weather: "33°C", icon: "fa-sun", items: [
+            { time: "09:15", type: "trans", title: "高鐵出發前往托雷多", desc: "從馬德里 Atocha 車站搭高鐵 AVANT 08292 直達托雷多（34分鐘）。抵達後先欣賞車站絕美的摩爾式雕刻結構。", url: "Estación+de+Toledo", PNR: "已訂票 · 09:15開車" },
+            { time: "10:00", type: "trans", title: "計程車直奔山谷觀景台", desc: "出站直接全體跳上計程車，直奔對岸山頭的 Mirador del Valle。在這裡拍下三面環河、固若金湯的托雷多山城經典明信片全景。拍完再原車叫回索科多佛廣場。", url: "Mirador+del+Valle+Toledo" },
+            { time: "11:00", type: "food", title: "El Trébol 享用爆漿起司肉丸", desc: "叫車回廣場後，第一時間衝進巷弄名店 El Trébol 享用托雷多必吃招牌菜——外皮金黃、內餡濃郁爆漿的起司大肉丸（Bombas）。", url: "Cerveceria+El+Trebol", menu: "必點：招牌起司大肉丸 (Bombas)、精選 Tapas" },
+            { time: "12:15", type: "spot", title: "賽萬提斯雕像與聖十字博物館", desc: "飯後散步經過唐吉訶德作者賽萬提斯銅像，參觀由 16 世紀古老醫院改建、免費入場且中庭迴廊極美的聖十字博物館。", url: "Museum+of+Santa+Cruz" },
+            { time: "13:30", type: "spot", title: "托雷多城堡外觀與街頭小吃", desc: "走到雄偉的托雷多城堡外觀拍照。隨後沿路在 VIANDAS 買現切生火腿錐拿在手上吃，並到 Rey del Mazapán 買杏仁糖餅。", url: "Viandas+Toledo", gift: "Rey del Mazapán 百年杏仁糖餅 (Mazapán)" },
+            { time: "14:30", type: "spot", title: "托雷多大教堂 入內參觀", desc: "入內參觀這座耗時 260 多年打造、西班牙哥德式建築的最高峰神殿，觀賞極盡華麗的唱詩班席與聖物室大師畫作。", url: "Toledo+Cathedral" },
+            { time: "16:30", type: "spot", title: "皇家聖胡安修道院 入內參觀", desc: "入內朝聖全西班牙最精緻、最美的火焰哥德式與穆德哈爾式雙層中庭迴廊，隨後漫步穿過古老的康布隆門。", url: "Monastery+of+San+Juan+de+los+Reyes" },
+            { time: "18:00", type: "spot", title: "聖馬丁橋日落與古城招牌燉肉", desc: "在古老的聖馬丁橋上觀賞塔霍河金色日落。隨後返回老店 Bar Ludeña 站在吧台點杯酒配招牌燉豬肉（Carcamusa），或去 Cervecería La Abadía 吃燉鹿肉。20:25搭高鐵返馬德里。", url: "Bar+Ludena", menu: "必吃：老味道燉豬肉 (Carcamusa)、燉鹿肉 (Stew)", PNR: "已訂票 · 20:25高鐵返程" }
+        ]},
+        10: { title: "馬德里 ➔ 格拉納達 · 阿拉伯老街與悲傷路夜景", city: "格拉納達 Granada", weather: "35°C", icon: "fa-sun", items: [
+            { time: "07:20", type: "trans", title: "高鐵 AVE 前往格拉納達", desc: "搭高鐵 AVE 02076 橫跨安達魯西亞，11:05抵達格拉納達。出站搭4號公車至「大教堂站」下車，步行至 Hotel Inglaterra 放行李辦入住。", url: "Hotel+Inglaterra+Granada", PNR: "已訂票 · 07:20開車" },
+            { time: "12:30", type: "food", title: "Bar La Riviera / La Nueva Bodega", desc: "朝聖格拉納達最著名的慷慨傳統：點一杯冰啤酒或冷飲，老闆就大方招待一份免費精美 Tapas，高CP值吃到飽！", url: "Bar+La+Riviera+Granada", food: "點飲料送免費 Tapas 特色" },
+            { time: "14:30", type: "spot", title: "C. Calderería Nueva 阿拉伯老街", desc: "漫步在充滿水煙香氣、斑斕香料與阿拉伯燈飾的手工藝品老街，彷彿一秒穿越到中東摩洛哥市場。", url: "Calle+Caldereria+Nueva" },
+            { time: "16:00", type: "spot", title: "阿爾拜辛區與觀景點", desc: "穿梭在白色迷宮般的阿爾拜辛區古老巷弄，中途在小巧安靜的 Mirador Placeta de Carvajales 觀景點拍照小憩。", url: "Mirador+Placeta+de+Carvajales" },
+            { time: "19:30", type: "spot", title: "聖尼古拉斯觀觀景台 黃金落日", desc: "全城最熱門觀景台！坐在石牆上聽著吉他手彈奏佛朗明哥，靜靜欣賞夕陽餘暉將對面的阿爾罕布拉宮染成一片璀璨黃金的魔幻時刻。", url: "Mirador+de+San+Nicolas" },
+            { time: "21:00", type: "food", title: "Restaurante Oliver 晚宴", desc: "前往市區名店享用道地安達魯西亞海鮮或燉肉，回程散步順道拍攝夜晚點燈、充滿神祕感的大教堂與皇家禮拜堂立面。", url: "Restaurante+Oliver+Granada" },
+            { time: "23:00", type: "spot", title: "悲傷路 Paseo de los Tristes 散步", desc: "夜深微風徐徐，沿著達羅河畔著名的「悲傷路」悠閒散步，抬頭仰望夜空中被燈光點亮、巍峨矗立在懸崖上的阿爾罕布拉宮幽靜夜景。", url: "Paseo+de+los+Tristes" }
+        ]},
+        11: { title: "格拉納達 · 阿爾罕布拉宮與靈魂佛朗明哥", city: "格拉納達 Granada", weather: "36°C", icon: "fa-sun", items: [
+            { time: "08:15", type: "trans", title: "搭乘 C30 紅色小巴上山", desc: "在伊莎貝拉廣場搭乘 C30 紅色巴士（€1.6），直接在「正義門」下車，這裡距離核心皇宮排隊區最近，最省力。", url: "Alhambra" },
+            { time: "09:00", type: "spot", title: "阿爾罕布拉宮 世紀深度參觀", desc: "朝聖伊斯蘭藝術的最高殿堂。核心重點：1. 納斯里皇宮（香桃木院、極繁複石膏雕刻與獅子庭園）、2. 阿爾卡薩巴要塞瞭望塔（鳥瞰全城）、3. 軒尼洛里菲夏宮花園。", url: "Alhambra", story: "極度嚴格限時入場，必須提早半小時在查理五世宮殿旁排隊！", PNR: "已訂票 · 預約 09:00納斯里皇宮" },
+            { time: "13:30", type: "food", title: "Bar los diamonds 現炸綜合海鮮", desc: "下山後直奔全城最狂的炸海鮮吧。站在吧台點餐，大口享用金黃酥脆、鮮甜多汁的現炸安達魯西亞綜合海鮮拼盤，配冰啤酒絕讚！", url: "Bar+Los+Diamantes+Plaza+Nueva", menu: "必點：酥炸綜合海鮮 (Pescaíto frito)" },
+            { time: "15:00", type: "spot", title: "飯店午休避暑 ➔ 吉拿棒一街下午茶", desc: "下午兩點到五點是一天當中最熱的熱浪時段，回飯店吹冷氣午休。傍晚前往 Bib-Rambla 廣場的 Gran Café Bib-Rambla，品嚐當地獨有、外酥內軟超有嚼勁的粗吉拿棒。", url: "Gran+Cafe+Bib-Rambla", menu: "必點體驗：波拉斯粗吉拿棒 (Porras)" },
+            { time: "19:15", type: "spot", title: "Tablao Flamenco Casa Ana 舞展", desc: "前往 Google 4.9 高分名店，在親密感十足的地下窯洞洞窟氛圍中，近距離朝聖節奏震撼、充滿歌者與舞者靈魂撕裂吶喊的安達魯西亞正宗佛朗明哥舞。", url: "Tablao+Flamenco+Casa+Ana", story: "表演時間一小時，利用 Booking 前幾天訂票即可。", PNR: "門票約 NT$661" }
+        ]},
+        12: { title: "格拉納達 ➔ 塞維亞 · 露台私房景觀與河畔夜生活", city: "塞維亞 Seville", weather: "38°C", icon: "fa-sun", items: [
+            { time: "12:48", type: "trans", title: "搭乘 AVANT 火車前往塞維亞", desc: "搭乘高鐵火車 AVANT 08525 班次，橫越南部平原。15:50 抵達塞維亞 Santa Justa 車站，出站直接4人合搭計程車直達 Hotel Inglaterra 辦理入住。", url: "Hotel+Inglaterra+Seville", PNR: "已訂票 · 車廂 3 / 座位 09A-09D" },
+            { time: "16:30", type: "spot", title: "飯店 6 樓頂樓露台私房拍照", desc: "辦完入住，第一時間搭電梯上飯店 6 樓頂樓觀景露台，在這裡無人打擾地俯瞰整座新廣場與古老市政廳的壯麗尖頂。", url: "Hotel+Inglaterra+Seville" },
+            { time: "17:30", type: "spot", title: "塞維亞西班牙廣場與公園野餐", desc: "朝聖全西班牙最宏偉寬廣、帶有半圓形護城河與各省份瓷磚壁龕的西班牙廣場。隨後進旁邊的瑪麗亞路易莎公園大樹蔭下吹風野餐、避暑。", url: "Plaza+de+Espana+Seville" },
+            { time: "19:30", type: "spot", title: "河畔黃金塔黃昏散步", desc: "黃昏時分漫步至瓜達幾維河畔古老的「黃金塔」，看落日餘暉灑在波光粼粼的河面上，吹著微風非常舒服。", url: "Torre+del+Oro" },
+            { time: "20:30", type: "food", title: "伊莎貝拉二世橋與特里亞納夜生活", desc: "步行跨越西班牙最古老的世紀鐵橋，來到對岸的 Betis 景觀沿河街道。這裡入夜後整排露太座坐滿當地人，挑間酒館喝杯特產 Cruzcampo 冰啤酒配 Tapas 小點。", url: "Puente+de+Isabel+II" },
+            { time: "22:00", type: "food", title: "Al Wadi 阿拉伯奢華烤肉", desc: "晚餐享用極受好評的清真穆斯林風格烤肉料理。香氣四溢的香料烤肉串與中東烤餅，為完美的塞維亞第一晚收尾。", url: "Al+Wadi+Seville" }
+        ]},
+        13: { title: "塞維亞 · 塞維亞王宮與大教堂登塔", city: "塞維亞 Seville", weather: "39°C", icon: "fa-sun", items: [
+            { time: "09:15", type: "spot", title: "塞維亞王宮 (提早排隊)", desc: "提早 15 分鐘抵達王宮宏偉的「獅子門」排隊。這座融合伊斯蘭與基督教的宮殿是《權力遊戲》多恩馬泰爾家族的流水花園拍攝地。", url: "Royal+Alcazar+of+Seville", story: "必看核心：少女中庭、使節廳（極度繁複浮湊的幾何星形木雕穹頂與立體石膏浮雕）。", PNR: "已訂票 · 預約 09:30入場" },
+            { time: "12:30", type: "food", title: "Calle Mateos Gago 景觀午餐", desc: "出宮殿後，直接來到正對著希拉達塔的露天餐廳大街。點幾杯冰鎮消暑的特產番茄冷湯配清爽的小點 Tapas，千萬別吃太撐。", url: "Calle+Mateos+Gago", menu: "必點消暑：安達魯西亞番茄冷湯 (Salmorejo)" },
+            { time: "14:30", type: "spot", title: "塞維亞大教堂與緩坡登希拉達塔", desc: "參觀世界第三大教堂。三大震撼點：1. 純金打造的世界最大木製黃金祭壇、2. 由四位國王抬棺、堅決不落地長眠的哥倫布靈柩、3. 沿著無樓梯的平緩斜坡盤旋登上希拉達塔頂，鳥瞰整座純白塞維亞老城。", url: "Seville+Cathedral", story: "當年不蓋樓梯是為了讓宣禮員可以帥氣地直接騎馬登頂哦！", PNR: "已訂票 · 預約 14:30入場" },
+            { time: "17:00", type: "spot", title: "聖十字區天然遮陰老巷弄探險", desc: "深入前猶太老城區，這裡的巷弄極度狹窄且九彎十八拐，是古人為了遮蔽盛夏烈日、保持涼爽的智慧結晶。穿梭其間防曬又好逛。", url: "Barrio+Santa+Cruz" },
+            { time: "19:00", type: "food", title: "Taberna Coloniales 平價 Tapas 王者", desc: "朝聖當地人瘋狂熱愛的平價排隊名店！菜單份量大、價格親民且美味爆表，大口享用烤章魚腳與威士忌豬里肌 Tapas。", url: "Taberna+Coloniales+Seville", food: "Taberna Coloniales" },
+            { time: "21:30", type: "food", title: "飯店 6 樓頂樓露台酒吧看夜景", desc: "夜幕低垂，回到 Hotel Inglaterra 頂樓露台酒吧，持飯店招待券點杯冰涼雞尾酒調酒，愜意欣賞前方大教堂與希拉達塔打上金色燈光的奢華夜景。", url: "Hotel+Inglaterra+Seville" }
+        ]},
+        14: { title: "塞維亞 ➔ 里斯本 · 飛越疆界與櫻桃酒街頭社交", city: "里斯本 Lisbon", weather: "28°C", icon: "fa-sun", items: [
+            { time: "09:30", type: "spot", title: "都市陽傘 太空感高空步道", desc: "步行前往全球最大的全木造建築都市陽傘。上層景觀步道極具科幻未來感。逛完後13:30從飯店搭 Uber 前往塞維亞機場（SVQ，車程30分鐘）。", url: "Setas+de+Sevilla" },
+            { time: "16:15", type: "trans", title: "跨國航班 飛往葡萄牙里斯本", desc: "搭乘葡萄牙航空 TP1105 班次飛往里斯本（LIS T1）。注意兩國有一小時時差。16:20 降落後，4人直接叫 Bolt 快速直達市區飯店 Lisbon Art Stay 辦理入住。", url: "Lisbon+Art+Stay+Hotel+%26+Apartments", PNR: "已訂票 · 16:15班次" },
+            { time: "18:30", type: "food", title: "Uma Marisqueira 神級海鮮燉飯", desc: "開吃！放完行李立刻衝到飯店對面的傳奇神店排隊！大口享用湯汁濃郁鮮甜、塞滿螃蟹螯、大蝦與淡菜的「葡式濕海鮮燉飯」，好喝到幸福感爆棚！", url: "Uma+Marisqueira", food: "Uma Marisqueira 濕海鮮飯", menu: "招牌：葡式海鮮燉飯 (Arroz de Marisco)" },
+            { time: "20:00", type: "spot", title: "佩德羅四世廣場與百年櫻桃酒", desc: "經維修中的聖胡斯塔升降機外觀，來到黑白波浪地磚地標羅西歐廣場。隨後在百年老店 A Ginjinha 點一小杯 €1.5 的櫻桃酒站在路邊乾杯，體驗最純粹的里斯本社交。", url: "A+Ginjinha", menu: "傳統體驗：櫻桃酒 (Ginjinha)" },
+            { time: "21:15", type: "spot", title: "聖伯多祿花園夜景 ➔ 共濟會磁磚牆 ➔ 豬扒包", desc: "登上聖伯多祿花園觀景台拍攝經典夜景。隨後向下走到 Casa do Ferreira das Tabuletas 觀賞帶有共濟會神祕符號的滿版瓷磚外牆。最後到 O Trevo 買正宗豬扒包（Bifana）對切配 Super Bock 冰啤酒，經老書店晃回飯店。", url: "O+Trevo+Lisbon", menu: "必吃庶民美食：豬扒包 (Bifana)、Super Bock 冰啤酒" }
+        ]},
+        15: { title: "里斯本 · 28號電車大教堂與紅屋頂落日", city: "里斯本 Lisbon", weather: "27°C", icon: "fa-sun", items: [
+            { time: "08:30", type: "food", title: "頂級爆漿蛋塔早餐", desc: "早餐在飯店旁的 Fábrica da Nata 或 Manteigaria 解決。現烤出來外皮酥脆到像千層派、內餡蛋香濃郁爆漿的蛋塔，撒上肉桂粉美味無敵！", url: "Manteigaria+Rua+Augusta", food: "Manteigaria 葡式蛋塔" },
+            { time: "09:30", type: "spot", title: "奧古斯塔街拱門與商業廣場", desc: "登上凱旋門拱門頂端觀景台，360度俯瞰龐巴爾下城。隨後穿過無邊際的商業廣場，走到河畔踩上昔日各國使節登陸、矗立在水中的兩根古老「大理石柱」。", url: "Arco+da+Rua+Augusta", PNR: "門票約 6 美金" },
+            { time: "12:00", type: "food", title: "Martinho da Arcada 文學鱈魚大餐", desc: "造訪拱廊下的百年文學餐廳（大導師佩索亞生前專屬座位店）。品嚐精緻講究的傳統龐巴爾風格馬介休鱈魚料理或豐厚多汁的葡式牛排。", url: "Martinho+da+Arcada", menu: "必點：馬介休鱈魚料理 (Bacalhau)、葡式牛排 (Bife)" },
+            { time: "14:30", type: "spot", title: "28 號電車與里斯本大教堂同框", desc: "漫步到古老的主教座堂前，架好相機。當經典的明黃色 28 號復古電車緩緩駛過石頂教堂前時，按下快門捕捉最代表里斯本的瞬間。", url: "Lisbon+Cathedral" },
+            { time: "15:30", type: "trans", title: "嘟嘟車直奔山上聖母觀觀景台", desc: "烈日午後防中暑省力密技！4人直接叫一台嘟嘟車或搭28號電車，直奔全城最高制高點——山上聖母觀景台。從這裡開始一路輕鬆下坡往下撿景點。", url: "Miradouro+da+Senhora+do+Monte" },
+            { time: "16:30", type: "spot", title: "阿爾法瑪舊城區下坡漫步", desc: "從最高點一路往下走，經過恩寵觀景台，漫步深入老宅縱橫、帶有歷史漫畫牆、充滿濃厚平民生活感的古老阿爾法瑪區。", url: "Alfama" },
+            { time: "18:30", type: "spot", title: "聖露西亞與太陽門觀觀景台 黃昏落日", desc: "坐在開滿艷麗九重葛與白色石柱的聖露西亞觀景台。一邊觀賞牆上描繪大地震前城市樣貌的藍白瓷磚畫，一邊看著夕陽漸漸將阿爾法瑪整片紅屋頂與海面染成粉紫色。晚餐找間有 Tasca 字樣的小酒館吃烤沙丁魚。", url: "Miradouro+de+Santa+Luzia", story: "觀景台牆上的磁磚畫非常珍貴，生動重現了 1755 年大地震前巍峨的王宮外觀哦！" }
+        ]},
+        16: { title: "里斯本 · 貝倫大航海榮光與台灣足跡搜尋", city: "里斯本 · 貝倫區", weather: "26°C", icon: "fa-sun", items: [
+            { time: "09:00", type: "trans", title: "4人合叫 Bolt 直奔貝倫區", desc: "防曬省時大絕招！四個人分攤計程車費比搭路面電車還便宜，15分鐘直接送到修道院大門口排隊。", url: "Jerónimos+Monastery" },
+            { time: "09:30", type: "spot", title: "熱羅尼莫斯修道院 黃金迴廊", desc: "入內參觀大航海曼紐埃爾式建築的巔峰。清晨陽光斜射進迴廊，石雕上的粗纜繩、珊瑚與海洋雕刻線條立體感最強、最美。10:30出來順遊隔壁聖瑪利亞教堂，瞻仰達伽馬之墓。", url: "Jerónimos+Monastery", story: "這裡滿滿的纜繩和貝殼石雕，都是當年用香料稅打造、歌頌大航海時代的輝狂哦！", PNR: "已訂票 · 預約 09:30入場" },
+            { time: "11:15", type: "food", title: "Pastéis de Belém 世界首家蛋塔店", desc: "走到這間自 1837 年營業至今、全世蛋塔的發源創始總店。內用人潮可怕，直接排「外帶區」速度極快，買一盒元祖大航海蛋塔在路邊撒上肉桂粉和糖粉享用。", url: "Pasteis+de+Belem", food: "Pastéis de Belém 創始蛋塔" },
+            { time: "12:00", type: "spot", title: "發現者紀念碑 尋找臺灣", desc: "高聳入雲的卡拉維爾帆船造型紀念碑（登頂可鳥瞰貝倫全景）。下來後在廣大的大理石世界航海羅盤地圖上，細心尋找臺灣 🇹🇼 的古老足跡合照！", url: "Padrão+dos+Descobrimentos", PNR: "門票約 NT$625" },
+            { time: "14:30", type: "spot", title: "貝倫塔外觀與印度犀牛石雕", desc: "走到佇立在河畔、守護防衛港口的防禦堡壘（外面拍照即可）。仔細尋找塔身外牆上，雕刻於 1515 年、當時轟動全歐洲的「第一隻印度犀牛」精緻石雕。", url: "Torre+de+Belem" },
+            { time: "16:00", type: "food", title: "Time Out Market 或 Formosa 台菜晚餐", desc: "傍晚可以去超大型文創美食市場 Time Out Market 逛逛，或者如果想念家鄉味，強烈推薦前往溫馨精緻的台式餐館 Formosa Principe Real 吃頓道地家鄉菜安撫胃袋。", url: "Formosa+Principe+Real" }
+        ]},
+        17: { title: "里斯本 ➔ 辛特拉 · 童話撞色城堡與世界的盡頭", city: "辛特拉 ➔ 羅卡角", weather: "24°C", icon: "fa-wind", items: [
+            { time: "09:00", type: "trans", title: "搭火車前往辛特拉老城", desc: "自 Rossio 車站搭乘火車直達辛特拉（40分鐘，刷 Zapping）。09:50 出站後免去排公車長龍，4人直接快速叫台計程車直奔佩納宮花園大門。", url: "Park+and+National+Palace+of+Pena" },
+            { time: "10:30", type: "trans", title: "搭乘雙程接駁車上山", desc: "抵達大門口後，直接憑套票搭乘園區雙程接駁車直達半山腰的城堡入口，保留體力。必須在 11:00 前抵達佩納宮核心入口。", url: "Park+and+National+Palace+of+Pena" },
+            { time: "11:00", type: "spot", title: "佩納宮 夢幻童話撞色城堡", desc: "入內參觀這座國王打造、大膽採用鮮艷黃紅撞色、融合伊斯蘭與文藝復興曼紐埃爾風格的魔幻高山宮殿。", url: "Park+and+National+Palace+of+Pena", PNR: "已訂票含接駁 · 預約 11:00" },
+            { time: "13:00", type: "spot", title: "摩爾人城堡 攀登高山長城", desc: "步行5分鐘前往隔壁大門。攀登蜿蜒在險峻山脊上的千年中世紀摩爾人古長城，風大險峻，頂端可以 360 度鳥瞰整片大西洋地平線。", url: "Castle+of+the+Moors", PNR: "門票約 14 美金" },
+            { time: "14:30", type: "food", title: "Bacalhau na Vila 鱈魚創意盛宴", desc: "叫計程車下山回到辛特拉小鎮，在極受好評的設計感餐館品嚐各式精緻有創意的百變鱈魚馬介休料理，美味驚艷。", url: "Bacalhau+na+Vila", menu: "精緻創意：各式百變鱈魚料理" },
+            { time: "16:00", type: "food", title: "百年餅店雙絕 ➔ 酥脆蛋塔", desc: "朝聖小鎮百年名店 Casa Piriquita，點一份內餡豐厚、帶有杏仁香氣的招牌枕頭酥（Travesseiro）與乳酪塔（Queijada）配義式濃縮咖啡。隨後再去 Fábrica da Nata 補一顆外皮脆到極致的清脆蛋塔。", url: "Casa+Piriquita", menu: "必吃百年雙絕：枕頭酥 (Travesseiro)、乳酪塔 (Queijada)" },
+            { time: "17:30", type: "trans", title: "計程車直奔歐洲大陸最西端 羅卡角", desc: "4人叫計程車（30分鐘）直奔世界的盡頭——羅卡角。站在陡峭的懸崖邊，與十字架石碑合照，默念詩人著名的史詩：『陸止於此、海始於斯』。", url: "Cabo+da+Roca" },
+            { time: "19:00", type: "food", title: "卡斯凱什渡假海岸 ➔ 海濱火車返程", desc: "叫 Uber 前往富豪渡假勝地 Cascais 小鎮，在金黃色沙灘旁的海鮮餐廳一邊吃晚餐一邊觀賞日落。最後在車站刷 Zapping（€2）搭乘愜意的沿海鐵路火車舒舒服服返回里斯本。", url: "Cascais" }
+        ]},
+        18: { title: "里斯本 ➔ 波多 · 藍白花磚暴走與大橋絕美萬家燈火", city: "波多 Porto", weather: "25°C", icon: "fa-sun", items: [
+            { time: "09:00", type: "trans", title: "搭乘葡萄牙 AP 高鐵前往波多", desc: "自飯店搭 Uber 前往 Santa Apolónia 車站，搭乘國鐵高鐵最高級 AP 列車前往波多 Campanhã 站（2小時50分）。11:48抵達後叫車前往旅館辦理入住。", url: "Mercure+Porto+Centro+Santa+Catarina", PNR: "已訂高鐵票 · 現場另付城市稅約25.6歐" },
+            { time: "12:30", type: "spot", title: "第一站：聖伊爾德豐索堂", desc: "Check-in 完畢出發！率先散步至這座宏偉教堂前，解鎖大廳正面由萬片經典藍白花磚鋪滿的壯麗立面，這是波多的花磚初體驗。", url: "Church+of+Santo+Ildefonso" },
+            { time: "13:00", type: "food", title: "第二站：Café Santiago 挑戰濕搭搭三明治", desc: "前往全城最火紅的傳奇老店，挑戰著名的熱量炸彈「Francesinha 濕搭搭三明治」。內夾牛排、火腿、香腸，外覆滿滿熔岩起司，最後淋上祕製微辣啤酒醬汁。份量極大，四人點兩份對切分享最剛好！", url: "Cafe+Santiago+Porto", food: "Café Santiago 濕搭搭三明治", menu: "必點名物：濕搭搭三明治 (Francesinha)" },
+            { time: "14:00", type: "food", title: "第三站：Majestic Café 百年貴族咖啡館", desc: "吃飽後散步至名列「世界十大最美咖啡館」第六名的奢華聖地。內部水晶吊燈與雕刻奢華古典，進來拍照、喝杯熱咖啡，享受舊時代歐洲貴族的優雅氣氛。", url: "Majestic+Cafe+Porto" },
+            { time: "14:40", type: "spot", title: "阿瑪斯教堂 (聖靈教堂) 滿版花磚牆", desc: "朝聖全波多最震撼、外牆完全被滿滿藍白歷史史詩花磚全面覆蓋的聖靈教堂，這是網美必拍的經典視覺大作！", url: "Chapel+of+Souls" },
+            { time: "15:30", type: "spot", title: "傳統市場巡禮與高CP值紀念品採買", desc: "在超好買的 TIP TOP souvenirs 橫掃高 CP 值的葡萄牙特色紀念品、軟木手工藝。隨後走進乾淨明亮的 Mercado do Bolhão 傳統傳統市場感受在地日常情調。", url: "Tip+Top+Souvenirs+Porto" },
+            { time: "16:30", type: "food", title: "ViaCatarina Shopping ➔ Conga 辣醬豬扒包", desc: "逛街並利用購物中心頂樓美食街的乾淨免費廁所。隨後到 Conga eat 醬汁更辣、肉質更濕潤鮮嫩的「波多風格辣豬扒包」，非常過癮！", url: "O+Conga+Porto", menu: "波多風味：Conga 辣醬豬扒包" },
+            { time: "18:00", type: "spot", title: "帝國麥當勞與聖本托史詩車站", desc: "經巨型 PORTO 字樣，參觀帶有奢華大鷹雕刻的帝國麥當勞。隨後步入全世最美火車站——聖本托車站，大廳由兩萬片藍白花磚描繪的葡萄牙戰役史詩牆令人嘆為觀止。", url: "Sao+Bento+Station" },
+            { time: "20:00", type: "spot", title: "路易一世大橋 (上層) ➔ 聖皮拉爾修道院明信片夜景", desc: "在車站旁買顆 Fábrica da Nata 蛋塔，慢步走上雄偉的路易一世大橋上層鐵橋步道。一路步行至加亞新城的 Miradouro da Serra do Pilar 修道院前廣場。在這裡卡位捕捉整座雙層大橋與杜羅河畔兩岸黃金萬家燈火點亮、震撼全世界的殿堂級夜景！", url: "Miradouro+da+Serra+do+Pilar" }
+        ]},
+        19: { title: "波多 · 杜羅河世界遺產彩色糖果屋與粉紫日落", city: "波多 Porto", weather: "26°C", icon: "fa-sun", items: [
+            { time: "08:30", type: "food", title: "Breakfast Lovers São Bento 網美早餐", desc: "在車站旁的超人氣早午餐店享用高顏值網美擺盤、精緻美味的手工烘焙與咖啡，悠閒開啟大晴天的一天。", url: "Breakfast+Lovers+Sao+Bento" },
+            { time: "09:30", type: "spot", title: "卡爾莫教堂順光花磚 ➔ 萊羅書店與教士塔外觀", desc: "朝聖卡爾莫教堂，其側牆大片精美藍白瓷磚壁畫在早晨陽光照射下完全順光，色澤最唯美。隨後順路經過萊羅書店外觀、教士塔外觀拍照，避開可怕的排隊人潮。", url: "Igreja+do+Carmo+Porto" },
+            { time: "11:00", type: "spot", title: "浪漫花街與波多大教堂古典花磚中庭", desc: "漫步在精品林立、充滿文藝氛圍的花街。經 Miradouro da Vitória 免費觀景台，前往高聳的波多大教堂入內參觀，朝聖內部保存極其完好、帶有精美雕刻與花磚的古典中庭迴廊。", url: "Porto+Cathedral" },
+            { time: "13:00", type: "spot", title: "吉卜力彩色小廣場與斑駁老階梯探險", desc: "深入隱密的舊城核心：擁有繽紛撞色外牆、極具吉卜力動畫既視感的 Largo da Pena Ventosa 迷你廣場；隨後穿梭至 Escadas do Barredo 斑駁古老階梯，這裡充滿晾衣架與神祕轉角，帶有最地道的老波多生活感。", url: "Largo+da+Pena+Ventosa" },
+            { time: "14:30", type: "spot", title: "里貝拉碼頭散步區 (世界文化遺產)", desc: "來到杜羅河畔著名的 Cais da Ribeira 碼頭。漫步欣賞沿岸整排緊密相連、五彩繽紛的世界文化遺產老房子，非常有河畔情調。", url: "Cais+da+Ribeira" },
+            { time: "16:00", type: "spot", title: "跨越大橋下層 ➔ 加亞新城河畔瘋狂拍照", desc: "邁開步伐，從路易一世大橋的「下層鐵橋步道」跨越杜羅河，來到對岸的加亞新城。以河對岸整排里貝拉碼頭彩色糖果屋為完美背景，拍攝最具代表性的波多大合照。", url: "Luis+I+Bridge" },
+            { time: "17:30", type: "trans", title: "加亞河畔單程纜車 ➔ 莫羅花園紫紅色殿堂落日", desc: "在碼頭旁購買單程纜車票（€7），舒適地搭乘 Gaia Cable Car 纜車一路爬升至高處的莫羅花園（Jardim do Morro）。坐在大草皮上聽著街頭藝人彈唱吉他，卡位朝聖全世界最著名的黃昏：看著夕陽緩緩西沉入大西洋，將整座大橋、杜羅河與彩色古城全部染成極度不可思議的夢幻粉紫色。晚餐在加亞碼頭吃露天海鮮，餐後直接高效率叫 Uber 返回飯店休息。", url: "Jardim+do+Morro", PNR: "纜車票 7 歐元" }
+        ]},
+        20: { title: "波多 ➔ 馬德里 · 頂級酒莊奢華品酒與重返西班牙", city: "波多 ➔ 馬德里", weather: "32°C", icon: "fa-sun", items: [
+            { time: "10:30", type: "food", title: "早餐墊胃 ➔ Sandeman 傳奇酒莊專業導覽", desc: "【方案A微醺】一定要先吃點東西墊胃！11:00 前往杜羅河畔大名鼎鼎的黑斗篷 Sandeman 酒莊。進行 50 分鐘的專業製程與地窖導覽，最後在奢華品酒室『連續痛快品嚐三杯不同年份、香甜濃郁但後勁極強的頂級加烈波特酒』！【方案B】不喝酒者可在 Zenith Brunch & Cocktails 睡到飽吃超澎湃網美早午餐加逛街補貨。13:30 四人叫 Uber 直奔波多機場（OPO，車程25分鐘）。", url: "Sandeman+Porto", story: "波特酒Port Wine是加烈葡萄酒，酒精濃度高達19%-20%，空腹喝三杯很容易醉哦，務必墊胃！", PNR: "酒莊導覽約 23 歐元" },
+            { time: "16:05", type: "trans", title: "跨國航班 飛回馬德里機場 T2", desc: "搭乘跨國飛機航班起飛，18:15 順利降落馬德里巴拉哈斯機場 T2。出站後直接叫計程車，前往今晚位於 Valdebebas 全新落成的高級住宅型公寓式酒店辦理入住。", url: "Be+Casa+Valdebebas", PNR: "已訂房 · 2間高級開放式公寓" },
+            { time: "19:30", type: "spot", title: "公寓式飯店奢華放鬆與主廚晚餐", desc: "體驗這間 Google 4.8 超高分新特區公寓。利用房間內極具設計感、現代北歐風的豪華全套廚房設備，四人一起溫馨下廚煮晚餐、享用美酒，在舒適寬敞的沙發空間好好放鬆，為完美的 22 天西葡圓夢長征舉行慶功尾聲！", url: "Be+Casa+Valdebebas" }
+        ]},
+        21: { title: "馬德里出發 ✈ lock 歐盟退稅與踏上返台航線", city: "馬德里 ➔ 阿布達比", weather: "33°C", icon: "fa-sun", items: [
+            { time: "07:30", type: "trans", title: "退房並計程車直達機場 T4", desc: "公寓飯店退房後直接叫車前往馬德里機場 T4 航廈（距離非常近）。08:00 抵達後第一時間辦理阿提哈德航空行李託運、登機，並預留充足時間至海關蓋章機辦理歐盟海關退稅。", url: "Adolfo+Suárez+Madrid–Barajas+Airport", PNR: "已出票 · 10:45高鐵/航班起飛" },
+            { time: "10:45", type: "trans", title: "阿提哈德航空 EY102 起飛", desc: "搭乘 EY102 班次，舒適地飛離歐洲大陸。預計 19:40 降落阿布達比國際機場 A 航廈。於航廈內更換登機門並進行轉機手續。", url: "Zayed+International+Airport" },
+            { time: "21:20", type: "trans", title: "阿提哈德航空 EY898 返台班機", desc: "換機搭乘 EY898 最終航線，橫跨亞洲夜空，在飛機上好好睡一覺、調整時差，舒適返回家園。", url: "Zayed+International+Airport" }
+        ]}
     };
 
-    // 自動動態生成 D2 ~ D21 雙行橫向切換標籤卡 (內建日期 7/1 ~ 7/20 對應)
+    // 目前選中的城市名稱 (給天氣跳轉使用)
+    let currentSearchCity = "巴塞隆納 Barcelona";
+
+    // 自動動態生成 D2 ~ D21 雙行橫向切換標籤卡
     const dayBar = document.getElementById('day-bar');
     const dateLabels = [];
     for (let day = 1; day <= 20; day++) {
@@ -708,21 +593,21 @@
         const tab = document.createElement('div');
         tab.className = `day-tab ${d === 2 ? 'active' : ''}`;
         
-        // 雙行極簡美學排版
         const dateSpan = `<span style="font-size: 10px; opacity: 0.6; margin-bottom: 2px;">${dateLabels[d-2]}</span>`;
         const daySpan = `<span style="font-size: 13px; font-weight: 600;">D${d}</span>`;
         
         tab.innerHTML = dateSpan + daySpan;
-        tab.setAttribute('onclick', `renderDay(${dayLabelsAndNumbers(d)}, this)`);
-        
-        // 防呆閉包傳值
-        function dayLabelsAndNumbers(num) { return num; }
-        
         tab.setAttribute('onclick', `renderDay(${d}, this)`);
         dayBar.appendChild(tab);
     }
 
-    // 渲染指定天數的行程
+    // 點擊天氣卡片強制透過 JavaScript 開啟 Google 搜尋
+    function openWeatherForecast() {
+        const url = `https://www.google.com/search?q=${encodeURIComponent(currentSearchCity)}+weather`;
+        window.open(url, '_blank');
+    }
+
+    // 渲染行程
     function renderDay(dayNum, element) {
         document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
         if(element) element.classList.add('active');
@@ -730,13 +615,12 @@
         const data = tripData[dayNum];
         if (!data) return;
 
+        currentSearchCity = data.city; // 隨時更新當前查詢的城市
+
         document.getElementById('header-subtitle').innerText = `DAY ${dayNum} ${data.title}`;
         document.getElementById('weath-city').innerText = data.city;
-        
-        // 動態變更天氣小工具的連結與靜態均溫文字
-        document.getElementById('weather-link').href = `https://www.google.com/search?q=${encodeURIComponent(data.city)}+weather`;
         document.getElementById('weath-temp').innerText = `歷史均溫 ${data.weather}`;
-        document.querySelector('.weather-widget i').className = `fa-solid ${data.icon}`;
+        document.querySelector('.weather-btn i').className = `fa-solid ${data.icon}`;
 
         const container = document.getElementById('timeline-container');
         container.innerHTML = '';
