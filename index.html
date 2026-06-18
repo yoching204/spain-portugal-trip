@@ -76,7 +76,7 @@
             margin-top: 2px;
         }
 
-        /* 快速切換天數橫條 */
+        /* 快速切換天數橫條 (升級雙行極簡彈性排版) */
         .day-selector-bar {
             display: flex;
             overflow-x: auto;
@@ -91,7 +91,7 @@
             display: none;
         }
         .day-tab {
-            padding: 6px 14px;
+            padding: 6px 16px;
             background-color: #F5F5F5;
             border-radius: 20px;
             font-size: 13px;
@@ -99,6 +99,10 @@
             color: var(--text-sub);
             cursor: pointer;
             transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            line-height: 1.2;
         }
         .day-tab.active {
             background-color: var(--text-main);
@@ -230,7 +234,7 @@
         .tag-gift-bg { background-color: var(--tag-gift); color: #1A1A1A; }
         .tag-pnr-bg { background-color: var(--tag-pnr); }
 
-        /* 自動導航按鈕 (自駕、探索首選) */
+        /* 自動導航按鈕 */
         .nav-btn {
             display: inline-flex;
             align-items: center;
@@ -327,10 +331,8 @@
         <p id="header-subtitle">DAY 2 巴塞隆納 · 不和諧街區</p>
     </header>
 
-    <!-- 天數橫向滾動切換條 (僅在行程分頁顯示) -->
-    <div class="day-selector-bar" id="day-bar">
-        <!-- 透過 JavaScript 自動產生 D2 ~ D21 -->
-    </div>
+    <!-- 天數與日期雙行橫向切換條 -->
+    <div class="day-selector-bar" id="day-bar"></div>
 
     <!-- ==================== 頁面：每日行程 ==================== -->
     <div id="page-schedule" class="app-page active">
@@ -347,9 +349,7 @@
         </div>
 
         <!-- 動態日程卡片容器 -->
-        <div id="timeline-container">
-            <!-- 由 JavaScript 依據點擊天數動態渲染 -->
-        </div>
+        <div id="timeline-container"></div>
     </div>
 
     <!-- ==================== 頁面：工具資訊 (機宿、聯絡電話) ==================== -->
@@ -445,7 +445,7 @@
                 { time: "14:30", type: "spot", title: "蘭布拉大道逛街", desc: "沿著繁華大道散步，途經奎爾宮外觀，尋找 Casa Bruno Cuadros 建築上提著吊燈的東方龍雕刻。", url: "Casa+Bruno+Cuadros" },
                 { time: "16:00", type: "spot", title: "哥倫布紀念塔與貝爾港", desc: "向南漫步至矗立在海濱的哥倫布塔，隨後沿著藍天碧海的貝爾港木棧道往東散步，吹海風消暑。", url: "Port+Vell" },
                 { time: "17:30", type: "spot", title: "海洋聖母聖殿", desc: "造訪知名影集拍攝地。由當年的碼頭工人一磚一瓦合力蓋成，堪稱巴塞隆納的「海神媽祖廟」。", url: "Basilica+of+Santa+Maria+del+Mar" },
-                { time: "19:00", type: "spot", title: "凱旋門與城堡公園", desc: "朝聖 1888 年世界博覽會的宏偉紅磚入口拱門，漫步進城堡公園享受悠閒的傍晚時光。", url: "Arc+de+Triomf" }
+                { time: "19:00", type: "spot", title: "凱旋門與城堡公園", desc: "朝盛 1888 年世界博覽會的宏偉紅磚入口拱門，漫步進城堡公園享受悠閒的傍晚時光。", url: "Arc+de+Triomf" }
             ]
         },
         5: {
@@ -458,7 +458,7 @@
                 { time: "13:40", type: "trans", title: "前往 Sants 高鐵車站", desc: "從飯店出發至加泰隆尼亞廣場站，搭近郊鐵路 Rodalies（掃高鐵票 QR Code 可免費搭乘）前往高鐵站。14:15抵達，預留時間行李安檢。", url: "Barcelona-Sants" },
                 { time: "15:00", type: "trans", title: "搭乘 AVE 高速列車前往馬德里", desc: "搭乘 Renfe AVE 03152 高鐵，直達馬德里。預計 18:17 抵達 Madrid Puerta de Atocha。出站後步行至正對面的 Hotel Mediodia 辦理入住。", url: "Hotel+Mediodia", PNR: "已訂票 · 車廂 6 / 座位 09A-10B" },
                 { time: "19:00", type: "food", title: "100 Montaditos (飯店隔壁)", desc: "連鎖國民小吃小酒館。點幾款 Montaditos 迷你法棍小三明治，配上一杯清涼解渴的 Tinto de Verano（紅酒加汽水）。", url: "100+Montaditos+Princesa" },
-                { time: "20:00", type: "spot", title: "麗池公園與阿爾卡拉門", desc: "漫步至馬德里的綠肺麗池公園，觀賞巍峨的阿方索十二世紀念碑。回程經過阿爾卡拉門，觀察上面的對稱古砲彈痕跡。", url: "El+Retiro+Park" },
+                { time: "20:00", type: "spot", title: "麗池公園與阿爾卡拉門", desc: "漫步至馬德里綠肺麗池公園，觀賞巍峨的阿方索十二世紀念碑。回程經過阿爾卡拉門，觀察上面的對稱古砲彈痕跡。", url: "El+Retiro+Park" },
                 { time: "21:00", type: "food", title: "La Barraca 正宗西班牙燉飯", desc: "造訪西貝萊斯廣場（大地女神噴泉）旁的老字號飯館，品嚐正宗厚實的華麗瓦倫西亞燉飯（Paella）。", url: "La+Barraca+Madrid", story: "極度熱門的名店，一定要提早預約喔！" }
             ]
         },
@@ -474,7 +474,7 @@
                 { time: "14:40", type: "food", title: "馬德里主廣場與炸魷魚三明治", desc: "漫步進被紅磚建築包圍的宏偉主廣場。前往名店 La Campana 買一份外酥內軟、塞滿現炸魷魚圈的三明治，坐在拱門下享用。", url: "La+Campana+Madrid", food: "La Campana 炸魷魚三明治" },
                 { time: "15:20", type: "spot", title: "El Rastro 露天跳蚤市場", desc: "從主廣場往南走，趕在收攤前朝聖歐洲最大的露天跳蚤市場，感受最地道的馬德里市集尾聲魅力。", url: "El+Rastro" },
                 { time: "16:30", type: "food", title: "聖米格爾市場 Tapas 大快朵頤", desc: "玻璃鋼骨架結構的高檔美食市場。點幾款奢華的生火腿、海鮮 Tapas。利用消費收據可以免費使用地下室乾淨廁所。", url: "Mercado+de+San+Miguel" },
-                { time: "18:00", type: "spot", title: "市政廳廣場", desc: "漫步造訪巴洛克式古老市政廳，欣賞環繞廣場、橫跨三個不同世紀的優雅古老建築群。", url: "Plaza+de+la+Villa" },
+                { time: "18:00", type: "spot", title: "市政廳廣場", desc: "漫步造訪巴洛克式古老市政廳，欣賞環繞廣場、橫跨三個不同世紀的優雅古老建築群群。", url: "Plaza+de+la+Villa" },
                 { time: "21:00", type: "food", title: "100 Montaditos (週日瘋狂優惠)", desc: "週日限定超級特惠！店內幾乎所有口味的 Montaditos 迷你三明治通通只要 €1，炸物點心拼盤只要 €2，CP值破天際！", url: "100+Montaditos+Princesa" }
             ]
         },
@@ -559,7 +559,7 @@
             icon: "fa-sun",
             items: [
                 { time: "12:48", type: "trans", title: "搭乘 AVANT 火車前往塞維亞", desc: "搭乘高鐵火車 AVANT 08525 班次，橫越南部平原。15:50 抵達塞維亞 Santa Justa 車站，出站直接4人合搭計程車（約2.5km）直達 Hotel Inglaterra 辦理入住。", url: "Hotel+Inglaterra+Seville", PNR: "已訂票 · 車廂 3 / 座位 09A-09D" },
-                { time: "16:30", type: "spot", title: "飯店 6 樓頂樓露台私房拍照", desc: "辦完入住，第一時間搭電梯上飯店 6 樓頂樓觀景露台，在這裡無人打擾地俯瞰整座新廣場與古老市政廳的壯麗尖頂。", url: "Hotel+Inglaterra+Seville" },
+                { time: "16:30", type: "spot", title: "飯店 6 樓頂頂樓露台私房拍照", desc: "辦完入住，第一時間搭電梯上飯店 6 樓頂樓觀景露台，在這裡無人打擾地俯瞰整座新廣場與古老市政廳的壯麗尖頂。", url: "Hotel+Inglaterra+Seville" },
                 { time: "17:30", type: "spot", title: "塞維亞西班牙廣場與公園野餐", desc: "朝聖全西班牙最宏偉寬廣、帶有半圓形護城河與各省份瓷磚壁龕的西班牙廣場。隨後進旁邊的瑪麗亞路易莎公園大樹蔭下吹風野餐、避暑。", url: "Plaza+de+Espana+Seville" },
                 { time: "19:30", type: "spot", title: "河畔黃金塔黃昏散步", desc: "黃昏時分漫步至瓜達幾維河畔古老的「黃金塔」，看落日餘暉灑在波光粼粼的河面上，吹著微風非常舒服。", url: "Torre+del+Oro" },
                 { time: "20:30", type: "food", title: "伊莎貝拉二世橋與特里亞納夜生活", desc: "步行跨越西班牙最古老的世紀鐵橋，來到對岸的 Betis 景觀沿河街道。這裡入夜後整排露太座坐滿當地人，挑間酒館喝杯特產 Cruzcampo 冰啤酒配 Tapas 小點。", url: "Puente+de+Isabel+II" },
@@ -572,7 +572,7 @@
             weather: "39°C / 26°C 烈日極熱",
             icon: "fa-sun",
             items: [
-                { time: "09:15", type: "spot", title: "塞維亞王宮 (提早排隊)", desc: "提早 15 分鐘抵達王宮宏偉的「獅子門（Puerta del León）」排隊。這座融合伊斯蘭與基督教的宮殿是《權力遊戲》多恩馬泰爾家族的流水花園拍攝地。", url: "Royal+Alcazar+of+Seville", story: "必看核心：少女中庭、使節廳（極度繁複浮誇的幾何星形木雕穹頂與立體石膏浮雕）。", PNR: "已訂票 · 預約 09:30入場" },
+                { time: "09:15", type: "spot", title: "塞維亞王宮 (提早排隊)", desc: "提早 15 分鐘抵達王宮宏偉的「獅子門（Puerta del León）」排隊。這座融合伊斯蘭與基督教的宮殿是《權力遊戲》多恩馬泰爾家族的流水花園拍攝地。", url: "Royal+Alcazar+of+Seville", story: "必看核心：少女中庭、使節廳（極度繁複浮湊的幾何星形木雕穹頂與立體石膏浮雕）。", PNR: "已訂票 · 預約 09:30入場" },
                 { time: "12:30", type: "food", title: "Calle Mateos Gago 景觀午餐", desc: "出宮殿後，直接來到正對著希拉達塔的露天餐廳大街。點幾杯冰鎮消暑的特產番茄冷湯（Salmorejo）配清爽的小點 Tapas，千萬別吃太撐。", url: "Calle+Mateos+Gago", menu: "必點消暑：安達魯西亞番茄冷湯 (Salmorejo)" },
                 { time: "14:30", type: "spot", title: "塞維亞大教堂與緩坡登希拉達塔", desc: "參觀世界第三大教堂。三大震撼點：1. 純金打造的世界最大木製黃金祭壇、2. 由四位國王抬棺、堅決不落地長眠的哥倫布靈柩、3. 沿著無樓梯的平緩斜坡盤旋登上希拉達塔頂，鳥瞰整座純白塞維亞老城。", url: "Seville+Cathedral", story: "當年不蓋樓梯是為了讓宣禮員可以帥氣地直接騎馬登頂哦！", PNR: "已訂票 · 預約 14:30入場" },
                 { time: "17:00", type: "spot", title: "聖十字區天然遮陰老巷弄探險", desc: "深入前猶太老城區，這裡的巷弄極度狹窄且九彎十八拐，是古人為了遮蔽盛夏烈日、保持涼爽的智慧結晶。穿梭其間防曬又好逛。", url: "Barrio+Santa+Cruz" },
@@ -588,7 +588,7 @@
             items: [
                 { time: "09:30", type: "spot", title: "都市陽傘 太空感高空步道", desc: "步行前往全球最大的全木造建築都市陽傘。上層景觀步道極具科幻未來感。逛完後13:30從飯店搭 Uber 前往塞維亞機場（SVQ，車程30分鐘）。", url: "Setas+de+Sevilla" },
                 { time: "16:15", type: "trans", title: "跨國航班 飛往葡萄牙里斯本", desc: "搭乘葡萄牙航空 TP1105 班次飛往里斯本（LIS T1）。注意兩國有一小時時差。16:20 降落後，4人直接叫 Bolt 快速直達市區飯店 Lisbon Art Stay 辦理入住。", url: "Lisbon+Art+Stay+Hotel+%26+Apartments", PNR: "已訂票 · 16:15班次" },
-                { time: "18:30", type: "food", title: "Uma Marisqueira 神級海鮮燉飯", desc: "放完行李立刻衝到飯店對面的傳奇神店排隊！大口享用湯汁濃郁鮮甜、塞滿螃蟹螯、大蝦與淡菜的「葡式濕海鮮燉飯」，好吃到靈魂出竅！", url: "Uma+Marisqueira", food: "Uma Marisqueira 濕海鮮飯", menu: "招牌：葡式海鮮燉飯 (Arroz de Marisco)" },
+                { time: "18:30", type: "food", title: "Uma Marisqueira 神級海鮮燉飯", desc: "開吃！放完行李立刻衝到飯店對面的傳奇神店排隊！大口享用湯汁濃郁鮮甜、塞滿螃蟹螯、大蝦與淡菜的「葡式濕海鮮燉飯」，好喝到幸福感爆棚！", url: "Uma+Marisqueira", food: "Uma Marisqueira 濕海鮮飯", menu: "招牌：葡式海鮮燉飯 (Arroz de Marisco)" },
                 { time: "20:00", type: "spot", title: "佩德羅四世廣場與百年櫻桃酒", desc: "經維修中的聖胡斯塔升降機外觀，來到黑白波浪地磚地標羅西歐廣場。隨後在百年老店 A Ginjinha 點一小杯 €1.5 的櫻桃酒站在路邊乾杯，體驗最純粹的里斯本社交。", url: "A+Ginjinha", menu: "傳統體驗：櫻桃酒 (Ginjinha)" },
                 { time: "21:15", type: "spot", title: "聖伯多祿花園夜景 ➔ 共濟會磁磚牆 ➔ 豬扒包", desc: "登上聖伯多祿花園觀景台拍攝經典夜景。隨後向下走到 Casa do Ferreira das Tabuletas 觀賞帶有共濟會神祕符號的滿版瓷磚外牆。最後到 O Trevo 買正宗豬扒包（Bifana）對切配 Super Bock 冰啤酒，經老書店晃回飯店。", url: "O+Trevo+Lisbon", menu: "必吃庶民美食：豬扒包 (Bifana)、Super Bock 冰啤酒" }
             ]
@@ -609,14 +609,14 @@
             ]
         },
         16: {
-            title: "里斯本 · 大航海時代荣光與航海羅盤地圖尋台",
+            title: "里斯本 · 大航海時代榮光與航海羅盤地圖尋台",
             city: "里斯本 · 貝倫區",
             weather: "26°C / 18°C 晴朗有風",
             icon: "fa-sun",
             items: [
                 { time: "09:00", type: "trans", title: "4人合叫 Bolt 直奔貝倫區", desc: "防曬省時大絕招！四個人分攤計程車費比搭路面電車還便宜，15分鐘直接送到修道院大門口排隊。", url: "Jerónimos+Monastery" },
-                { time: "09:30", type: "spot", title: "熱羅尼莫斯修道院 黃金迴廊", desc: "入內參觀大航海曼紐埃爾式建築的巔峰。清晨陽光斜射進迴廊，石雕上的粗纜繩、珊瑚與海洋雕刻線條立體感最強、最美。10:30出來順遊隔壁聖瑪利亞教堂，瞻仰達伽馬之墓。", url: "Jerónimos+Monastery", story: "這裡滿滿的纜繩和貝殼石雕，都是當年用香料稅打造、歌頌大航海時代的輝煌哦！", PNR: "已訂票 · 預約 09:30入場" },
-                { time: "11:15", type: "food", title: "Pastéis de Belém 世界首家蛋塔店", desc: "走到這間自 1837 年營業至今、全世蛋塔的發源創始總店。內用人潮可怕，直接排「外帶區」速度極快，買一盒熱騰騰、外皮酥爆的元祖大航海蛋塔在路邊撒上肉桂粉和糖粉享用。", url: "Pasteis+de+Belem", food: "Pastéis de Belém 創始蛋塔" },
+                { time: "09:30", type: "spot", title: "熱羅尼莫斯修道院 黃金迴廊", desc: "入內參觀大航海曼紐埃爾式建築的巔峰。清晨陽光斜射進迴廊，石雕上的粗纜繩、珊瑚與海洋雕刻線條立體感最強、最美。10:30出來順遊隔壁聖瑪利亞教堂，瞻仰達伽馬之墓。", url: "Jerónimos+Monastery", story: "這裡滿滿的纜繩和貝殼石雕，都是當年用香料稅打造、歌頌大航海時代的輝狂哦！", PNR: "已訂票 · 預約 09:30入場" },
+                { time: "11:15", type: "food", title: "Pastéis de Belém 世界首家蛋塔店", desc: "走到這間自 1837 年營業至今、全世蛋塔的發源創始總店。內用人潮可怕，直接排「外帶區」速度極快，買一盒元祖大航海蛋塔在路邊撒上肉桂粉和糖粉享用。", url: "Pasteis+de+Belem", food: "Pastéis de Belém 創始蛋塔" },
                 { time: "12:00", type: "spot", title: "發現者紀念碑 尋找臺灣", desc: "高聳入雲的卡拉維爾帆船造型紀念碑（登頂可鳥瞰貝倫全景）。下來後在廣大的大理石世界航海羅盤地圖上，細心尋找臺灣 🇹🇼 的古老足跡合照！", url: "Padrão+dos+Descobrimentos", PNR: "門票約 NT$625" },
                 { time: "14:30", type: "spot", title: "貝倫塔外觀與印度犀牛石雕", desc: "走到佇立在河畔、守護防衛港口的防禦堡壘（外面拍照即可）。仔細尋找塔身外牆上，雕刻於 1515 年、當時轟動全歐洲的「第一隻印度犀牛」精緻石雕。", url: "Torre+de+Belem" },
                 { time: "16:00", type: "food", title: "Time Out Market 或 Formosa 台菜晚餐", desc: "傍晚可以去超大型文創美食市場 Time Out Market 逛逛，或者如果想念家鄉味，強烈推薦前往溫馨精緻的台式餐館 Formosa Principe Real 吃頓道地家鄉菜安撫胃袋。", url: "Formosa+Principe+Real" }
@@ -634,7 +634,7 @@
                 { time: "13:00", type: "spot", title: "摩爾人城堡 攀登高山長城", desc: "步行5分鐘前往隔壁大門。攀登蜿蜒在險峻山脊上的千年中世紀摩爾人古長城，風大險峻，頂端可以 360 度鳥瞰整片大西洋地平線。", url: "Castle+of+the+Moors", PNR: "門票約 14 美金" },
                 { time: "14:30", type: "food", title: "Bacalhau na Vila 鱈魚創意盛宴", desc: "叫計程車下山回到辛特拉小鎮，在極受好評的設計感餐館品嚐各式精緻有創意的百變鱈魚馬介休料理，美味驚艷。", url: "Bacalhau+na+Vila", menu: "精緻創意：各式百變鱈魚料理" },
                 { time: "16:00", type: "food", title: "百年餅店雙絕 ➔ 酥脆蛋塔", desc: "朝聖小鎮百年名店 Casa Piriquita，點一份內餡豐厚、帶有杏仁香氣的招牌枕頭酥（Travesseiro）與乳酪塔（Queijada）配義式濃縮咖啡。隨後再去 Fábrica da Nata 補一顆外皮脆到極致的清脆蛋塔。", url: "Casa+Piriquita", menu: "必吃百年雙絕：枕頭酥 (Travesseiro)、乳酪塔 (Queijada)" },
-                { time: "17:30", type: "trans", title: "計程車直奔歐洲大陸最西端 羅卡角", desc: "4人合資叫計程車（30分鐘）直奔世界的盡頭——羅卡角。站在陡峭的懸崖邊，與十字架石碑合照，默念詩人著名的史詩：『陸止於此、海始於斯』。", url: "Cabo+da+Roca" },
+                { time: "17:30", type: "trans", title: "計程車直奔歐洲大陸最西端 羅卡角", desc: "4人叫計程車（30分鐘）直奔世界的盡頭——羅卡角。站在陡峭的懸崖邊，與十字架石碑合照，默念詩人著名的史詩：『陸止於此、海始於斯』。", url: "Cabo+da+Roca" },
                 { time: "19:00", type: "food", title: "卡斯凱什渡假海岸 ➔ 海濱火車返程", desc: "叫 Uber 前往富豪渡假勝地 Cascais 小鎮，在金黃色沙灘旁的海鮮餐廳一邊吃晚餐一邊觀賞日落。最後在車站刷 Zapping（€2）搭乘愜意的沿海鐵路火車舒舒服服返回里斯本。", url: "Cascais" }
             ]
         },
@@ -652,7 +652,7 @@
                 { time: "15:30", type: "spot", title: "傳統市場巡禮與高CP值紀念品採買", desc: "在超好買的 TIP TOP souvenirs 橫掃高 CP 值的葡萄牙特色紀念品、軟木手工藝。隨後走進乾淨明亮的 Mercado do Bolhão 傳統傳統市場感受在地日常情調。", url: "Tip+Top+Souvenirs+Porto" },
                 { time: "16:30", type: "food", title: "ViaCatarina Shopping ➔ Conga 辣醬豬扒包", desc: "逛街並利用購物中心頂樓美食街的乾淨免費廁所。隨後到 Conga 吃醬汁更辣、肉質更濕潤鮮嫩的「波多風格辣豬扒包」，非常過癮！", url: "O+Conga+Porto", menu: "波多風味：Conga 辣醬豬扒包" },
                 { time: "18:00", type: "spot", title: "帝國麥當勞與聖本托史詩車站", desc: "經巨型 PORTO 字樣，參觀帶有奢華大鷹雕刻的帝國麥當勞。隨後步入全世最美火車站——聖本托車站，大廳由兩萬片藍白花磚描繪的葡萄牙戰役史詩牆令人嘆為觀止。", url: "Sao+Bento+Station" },
-                { time: "20:00", type: "spot", title: "路易一世大橋 (上層) ➔ 聖皮拉爾修道院明信片夜景", desc: "在車站旁買顆 Fábrica da Nata 蛋塔，慢步走上宏偉的路易一世大橋上層鐵橋步道。一路步行至加亞新城的 Miradouro da Serra do Pilar 修道院前廣場。在這裡卡位捕捉整座雙層大橋與杜羅河畔兩岸黃金萬家燈火點亮、震撼全世界的殿堂級夜景！", url: "Miradouro+da+Serra+do+Pilar" }
+                { time: "20:00", type: "spot", title: "路易一世大橋 (上層) ➔ 聖皮拉爾修道院明信片夜景", desc: "在車站旁買顆 Fábrica da Nata 蛋塔，慢步走上雄偉的路易一世大橋上層鐵橋步道。一路步行至加亞新城的 Miradouro da Serra do Pilar 修道院前廣場。在這裡卡位捕捉整座雙層大橋與杜羅河畔兩岸黃金萬家燈火點亮、震撼全世界的殿堂級夜景！", url: "Miradouro+da+Serra+do+Pilar" }
             ]
         },
         19: {
@@ -694,37 +694,43 @@
         }
     };
 
-    // 自動動態生成 D2 ~ D21 橫向切換標籤卡
+    // 自動動態生成 D2 ~ D21 雙行橫向切換標籤卡 (內建日期 7/1 ~ 7/20 對應)
     const dayBar = document.getElementById('day-bar');
+    const dateLabels = [];
+    for (let day = 1; day <= 20; day++) {
+        dateLabels.push(`7/${day}`);
+    }
+
     for (let d = 2; d <= 21; d++) {
         const tab = document.createElement('div');
         tab.className = `day-tab ${d === 2 ? 'active' : ''}`;
-        tab.innerText = `D${d}`;
+        
+        // 雙行極簡美學排版
+        const dateSpan = `<span style="font-size: 10px; opacity: 0.6; margin-bottom: 2px;">${dateLabels[d-2]}</span>`;
+        const daySpan = `<span style="font-size: 13px; font-weight: 600;">D${d}</span>`;
+        
+        tab.innerHTML = dateSpan + daySpan;
         tab.setAttribute('onclick', `renderDay(${d}, this)`);
         dayBar.appendChild(tab);
     }
 
-    // 渲染指定天數的行程字卡與卡片
+    // 渲染指定天數的行程
     function renderDay(dayNum, element) {
-        // 切換 Tab 狀態
         document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
         if(element) element.classList.add('active');
 
         const data = tripData[dayNum];
         if (!data) return;
 
-        // 更新頂部 Header 文字
         document.getElementById('header-subtitle').innerText = `DAY ${dayNum} ${data.title}`;
         document.getElementById('weath-city').innerText = data.city;
         
-        // 更新天氣資訊
         const weatherWidget = document.querySelector('.weather-widget');
         weatherWidget.querySelector('span').innerText = data.weather;
         weatherWidget.querySelector('i').className = `fa-solid ${data.icon}`;
 
-        // 渲染卡片清單
         const container = document.getElementById('timeline-container');
-        container.innerHTML = ''; // 清空舊的
+        container.innerHTML = '';
 
         data.items.forEach(item => {
             const itemDiv = document.createElement('div');
@@ -746,7 +752,6 @@
                 `;
             }
 
-            // 自動加上導航按鈕 (自駕、探索直達)
             const navUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.url)}`;
 
             itemDiv.innerHTML = `
@@ -767,10 +772,10 @@
         });
     }
 
-    // 初始化第一筆資料 (DAY 2)
+    // 初始化加載 DAY 2
     renderDay(2);
 
-    // 底部大分頁切換系統 (行程頁面 vs 核心工具機宿資訊)
+    // 頁面大分頁切換
     function switchTab(tabId, el) {
         document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
         el.classList.add('active');
