@@ -4,192 +4,127 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>2026 西葡夢幻之旅</title>
-    <!-- 引入 Tailwind CSS 與 Google Material Icons 模擬 App 樣式 -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- 使用標準官方樣式，防止瀏覽器阻擋 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-        .safe-bottom { padding-bottom: calc(4rem + env(safe-area-inset-bottom)); }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; padding-bottom: 80px; }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased flex flex-col min-h-screen">
+<body class="bg-gray-50 text-gray-800 antialiased">
 
-    <!-- APP 頂部導覽列 (Header) -->
-    <header class="sticky top-0 z-50 bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-md pt-safe">
-        <div class="flex items-center justify-between px-4 py-3">
+    <!-- APP 頂部導覽列 -->
+    <header class="sticky top-0 z-50 bg-yellow-500 text-white shadow-md">
+        <div class="flex items-center justify-between px-4 py-4 bg-gradient-to-r from-yellow-500 to-red-600">
             <div class="flex items-center space-x-2">
                 <span class="material-icons">flight_takeoff</span>
-                <h1 class="text-xl font-bold tracking-wide">2026 西葡夢幻之旅</h1>
+                <h1 class="text-lg font-bold">2026 西葡夢幻之旅</h1>
             </div>
-            <span class="text-xs bg-white/20 px-2 py-1 rounded-full border border-white/30">6/30 - 7/21</span>
+            <span class="text-xs bg-black bg-opacity-20 px-2 py-1 rounded-full">6/30 - 7/21</span>
         </div>
         
-        <!-- 城市快捷標籤 (橫向滑動) -->
-        <div class="flex space-x-2 overflow-x-auto px-4 pb-3 hide-scrollbar text-sm font-medium">
-            <button class="bg-white text-orange-600 px-4 py-1.5 rounded-full shadow-sm shrink-0 flex items-center"><span class="material-icons text-base mr-1">map</span>總覽</button>
-            <button class="bg-amber-600/50 text-white px-4 py-1.5 rounded-full shrink-0">巴塞隆納</button>
-            <button class="bg-amber-600/50 text-white px-4 py-1.5 rounded-full shrink-0">馬德里</button>
-            <button class="bg-amber-600/50 text-white px-4 py-1.5 rounded-full shrink-0">里斯本</button>
-            <button class="bg-amber-600/50 text-white px-4 py-1.5 rounded-full shrink-0">波多</button>
+        <!-- 城市快捷標籤 -->
+        <div class="flex space-x-2 overflow-x-auto px-4 py-2 bg-gradient-to-r from-yellow-500 to-red-600 hide-scrollbar text-xs font-medium">
+            <button class="bg-white text-red-600 px-3 py-1 rounded-full shadow-sm whitespace-nowrap">📍 總覽</button>
+            <button class="bg-black bg-opacity-20 text-white px-3 py-1 rounded-full whitespace-nowrap">巴塞隆納</button>
+            <button class="bg-black bg-opacity-20 text-white px-3 py-1 rounded-full whitespace-nowrap">馬德里</button>
+            <button class="bg-black bg-opacity-20 text-white px-3 py-1 rounded-full whitespace-nowrap">里斯本</button>
+            <button class="bg-black bg-opacity-20 text-white px-3 py-1 rounded-full whitespace-nowrap">波多</button>
         </div>
     </header>
 
-    <!-- APP 主內文區 (Main Content) -->
-    <main class="flex-1 px-4 py-4 safe-bottom space-y-6">
+    <!-- APP 主內文區 -->
+    <main class="px-4 py-4 space-y-4">
 
-        <!-- 區塊一：航班/交通即時卡片 -->
-        <section class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4">
-            <div class="flex items-center justify-between mb-3 border-b border-slate-100 pb-2">
-                <div class="flex items-center space-x-2 text-slate-500 font-bold text-sm">
-                    <span class="material-icons text-amber-500">airplane_ticket</span>
+        <!-- 交通即時卡片 -->
+        <div class="bg-white rounded-xl shadow p-4 border border-gray-100">
+            <div class="flex items-center justify-between mb-3 border-b border-gray-100 pb-2">
+                <div class="flex items-center space-x-2 text-gray-500 font-bold text-xs">
+                    <span class="material-icons text-yellow-500 text-sm">airplane_ticket</span>
                     <span>本日首要交通資訊</span>
                 </div>
-                <span class="text-xs text-orange-500 font-semibold bg-orange-50 px-2 py-0.5 rounded">去程</span>
+                <span class="text-xs text-red-500 font-semibold bg-red-50 px-2 py-0.5 rounded">去程</span>
             </div>
-            <!-- 航班動態 -->
-            <div class="flex items-center justify-between py-2">
+            <div class="flex items-center justify-between py-1">
                 <div class="text-center w-1/3">
-                    <p class="text-2xl font-bold text-slate-800">TPE</p>
-                    <p class="text-xs text-slate-400">桃園 T2</p>
-                    <p class="text-sm font-semibold text-orange-600 mt-1">19:25</p>
+                    <p class="text-xl font-bold text-gray-800">TPE</p>
+                    <p class="text-[10px] text-gray-400">桃園 T2</p>
+                    <p class="text-xs font-semibold text-red-600 mt-1">19:25</p>
                 </div>
                 <div class="flex flex-col items-center justify-center w-1/3 px-2">
-                    <span class="text-xs text-slate-400 font-mono">6/30 DAY 1</span>
-                    <div class="w-full border-t-2 border-dashed border-slate-200 relative my-1">
-                        <span class="material-icons text-slate-300 absolute -top-2.5 left-1/2 -translate-x-1/2 bg-white px-1 text-sm">flight</span>
+                    <span class="text-[10px] text-gray-400">6/30 DAY 1</span>
+                    <div class="w-full border-t border-dashed border-gray-300 relative my-1">
+                        <span class="material-icons text-gray-300 absolute -top-2 left-1/2 transform -translate-x-1/2 bg-white px-1 text-xs">flight</span>
                     </div>
-                    <span class="text-[10px] text-slate-400">經阿布達比(AUH)</span>
                 </div>
                 <div class="text-center w-1/3">
-                    <p class="text-2xl font-bold text-slate-800">BCN</p>
-                    <p class="text-xs text-slate-400">巴塞隆納 T1</p>
-                    <p class="text-sm font-semibold text-orange-600 mt-1">07:35 <span class="text-[10px] text-slate-400">(+1)</span></p>
+                    <p class="text-xl font-bold text-gray-800">BCN</p>
+                    <p class="text-[10px] text-gray-400">巴塞隆納 T1</p>
+                    <p class="text-xs font-semibold text-red-600 mt-1">07:35 (+1)</p>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <!-- 區塊二：每日行程卡片範例 (DAY 2 巴塞隆納) -->
-        <section class="space-y-3">
+        <!-- 每日行程卡片 (DAY 2) -->
+        <div class="space-y-2">
             <div class="flex items-center justify-between">
-                <div class="flex items-baseline space-x-2">
-                    <h2 class="text-lg font-bold text-slate-900">7/1 (三) DAY 2</h2>
-                    <span class="text-sm text-slate-500">巴塞隆納</span>
-                </div>
-                <div class="flex items-center text-xs text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md font-medium">
-                    <span class="material-icons text-xs mr-1">hotel</span> HCC Montblanc
-                </div>
+                <h2 class="text-base font-bold text-gray-900">7/1 (三) DAY 2 · 巴塞隆納</h2>
+                <span class="text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded font-medium">🏨 HCC Montblanc</span>
             </div>
 
-            <!-- 每日代辦清單/時間軸樣式 -->
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-                <!-- 交通指引小卡 -->
-                <div class="bg-slate-50 p-3 border-b border-slate-100 flex items-start space-x-2 text-xs text-slate-600">
-                    <span class="material-icons text-blue-500 text-sm mt-0.5">directions_bus</span>
-                    <div>
-                        <p class="font-semibold text-slate-700">機場交通指引</p>
-                        <p class="text-slate-500 mt-0.5">搭乘機場巴士 Aerobús A1 到加泰隆尼亞廣場，步行 5 分鐘抵達旅館。費用：€7.75/人。Gemini 備註：四人(共€31)可評估直接叫計程車更划算！</p>
-                    </div>
+            <div class="bg-white rounded-xl shadow border border-gray-100 overflow-hidden">
+                <div class="bg-gray-50 p-3 border-b border-gray-100 text-xs text-gray-600">
+                    <p class="font-bold text-gray-700">🚌 機場交通指引</p>
+                    <p class="text-gray-500 mt-0.5">搭機場巴士 Aerobús A1 到加泰隆尼亞廣場，走 5 分鐘到旅館。費用 €7.75/人[cite: 1]。</p>
                 </div>
 
-                <!-- 點位時間軸 -->
-                <div class="p-4 space-y-4 relative before:absolute before:top-6 before:bottom-6 before:left-6 before:w-0.5 before:bg-slate-100">
-                    
-                    <!-- 景點 1：已訂票標記 -->
-                    <div class="flex items-start space-x-3 relative">
-                        <div class="w-4 h-4 rounded-full bg-orange-500 ring-4 ring-orange-100 flex items-center justify-center z-10 mt-1.5"></div>
-                        <div class="flex-1">
-                            <div class="flex items-center justify-between">
-                                <h3 class="font-bold text-slate-800 text-base">1. 巴特婁之家 (入內參觀)</h3>
-                                <span class="text-[10px] bg-red-50 text-red-500 px-2 py-0.5 rounded-full font-bold border border-red-100">已訂銀色票</span>
+                <div class="p-4 space-y-4">
+                    <div class="flex items-start space-x-2">
+                        <div class="w-2 h-2 rounded-full bg-red-500 mt-1.5 shrink-0"></div>
+                        <div>
+                            <div class="flex items-center space-x-2">
+                                <h3 class="font-bold text-gray-800 text-sm">1. 巴特婁之家</h3>
+                                <span class="text-[10px] bg-red-50 text-red-500 px-1.5 py-0.2 rounded border border-red-200">已訂銀色票</span>
                             </div>
-                            <p class="text-xs text-slate-400 mt-0.5">💡 上午順光。三連棟（不和諧街區）風格迥異，建議走到馬路中島拍攝建築立面。</p>
-                            <div class="mt-1.5 text-xs text-slate-500 bg-slate-50 p-2 rounded-lg border border-slate-100 font-mono">
-                                💰 票價：NT$1,266 / 人
-                            </div>
+                            <p class="text-xs text-gray-500 mt-0.5">💡 已訂票（NT$1,266/人）[cite: 1]。上午順光，建議走到馬路中島拍攝建築立面[cite: 1]。</p>
                         </div>
                     </div>
 
-                    <!-- 景點 2：美食 -->
-                    <div class="flex items-start space-x-3 relative">
-                        <div class="w-4 h-4 rounded-full bg-amber-500 ring-4 ring-amber-100 flex items-center justify-center z-10 mt-1.5"></div>
-                        <div class="flex-1">
-                            <h3 class="font-bold text-slate-800 text-base">2. Tapa Tapa Passeig de Gràcia</h3>
-                            <p class="text-xs text-slate-500 mt-0.5">🍽️ 中午簡單吃 Tapas 墊墊胃。</p>
+                    <div class="flex items-start space-x-2">
+                        <div class="w-2 h-2 rounded-full bg-yellow-500 mt-1.5 shrink-0"></div>
+                        <div>
+                            <h3 class="font-bold text-gray-800 text-sm">2. Tapa Tapa 簡單吃</h3>
+                            <p class="text-xs text-gray-500 mt-0.5">🍽️ Passeig de Gràcia 店，中午歇腳吃 Tapas[cite: 1]。</p>
                         </div>
                     </div>
 
-                    <!-- 景點 3：純外觀 -->
-                    <div class="flex items-start space-x-3 relative">
-                        <div class="w-4 h-4 rounded-full bg-slate-300 ring-4 ring-slate-100 flex items-center justify-center z-10 mt-1.5"></div>
-                        <div class="flex-1">
-                            <h3 class="font-bold text-slate-700 text-base">3. 米拉之家 (拍外部)</h3>
-                            <p class="text-xs text-slate-400 mt-0.5">📸 下午順光。是否入內參觀視當下體力與排隊狀況決定。</p>
-                        </div>
-                    </div>
-
-                    <!-- 景點 4：備註指引 -->
-                    <div class="flex items-start space-x-3 relative">
-                        <div class="w-4 h-4 rounded-full bg-slate-300 ring-4 ring-slate-100 flex items-center justify-center z-10 mt-1.5"></div>
-                        <div class="flex-1">
-                            <h3 class="font-bold text-slate-700 text-base">4. 聖家堂外觀初解鎖</h3>
-                            <p class="text-xs text-slate-400 mt-0.5">🚇 交通：從米拉之家搭乘地鐵 L5 線，僅需兩站即可直達聖家堂，先拍一波外觀！</p>
+                    <div class="flex items-start space-x-2">
+                        <div class="w-2 h-2 rounded-full bg-gray-400 mt-1.5 shrink-0"></div>
+                        <div>
+                            <h3 class="font-bold text-gray-700 text-sm">3. 米拉之家</h3>
+                            <p class="text-xs text-gray-500 mt-0.5">📸 下午順光，拍外觀即可，是否入內看當下狀況[cite: 1]。</p>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
-
-        <!-- 區塊三：景點票券包 (我的錢包/票券管理概念) -->
-        <section class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 space-y-3">
-            <div class="flex items-center space-x-2 text-slate-700 font-bold text-sm">
-                <span class="material-icons text-red-500">confirmation_number</span>
-                <span>即時票券與預約狀態 (已訂)</span>
-            </div>
-            
-            <div class="grid grid-cols-2 gap-2 text-xs">
-                <div class="p-2.5 bg-orange-50/50 rounded-xl border border-orange-100">
-                    <p class="text-slate-500 font-medium">7/2 09:00 聖家堂</p>
-                    <p class="text-orange-600 font-bold mt-0.5">含受難面登塔 (09:45)</p>
-                    <p class="text-[10px] text-slate-400 mt-1">NT$1,334/人 • 需下App導覽</p>
-                </div>
-                <div class="p-2.5 bg-orange-50/50 rounded-xl border border-orange-100">
-                    <p class="text-slate-500 font-medium">7/2 17:00 奎爾公園</p>
-                    <p class="text-orange-600 font-bold mt-0.5">看點：糖果屋/蜥蜴</p>
-                    <p class="text-[10px] text-slate-400 mt-1">NT$667/人 • 建議搭Uber至側門</p>
-                </div>
-                <div class="p-2.5 bg-blue-50/50 rounded-xl border border-blue-100">
-                    <p class="text-slate-500 font-medium">7/4 15:00 高鐵 AVE</p>
-                    <p class="text-blue-600 font-bold mt-0.5">巴塞隆納 → 馬德里</p>
-                    <p class="text-[10px] text-slate-400 mt-1">NT$1,320/人 • 可掃碼免簽搭郊鐵</p>
-                </div>
-                <div class="p-2.5 bg-emerald-50/50 rounded-xl border border-emerald-100">
-                    <p class="text-slate-500 font-medium">7/7 烤乳豬餐廳</p>
-                    <p class="text-emerald-600 font-bold mt-0.5">Mesón de Cándido</p>
-                    <p class="text-[10px] text-slate-400 mt-1">13:00 已訂位 • 塞哥維亞</p>
-                </div>
-            </div>
-        </section>
+        </div>
 
     </main>
 
-    <!-- APP 底部工具列 (Bottom Navigation Tab Bar) -->
-    <nav class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-lg px-4 py-2 flex justify-around items-center z-50 pb-safe">
-        <button class="flex flex-col items-center space-y-0.5 text-orange-600">
-            <span class="material-icons text-2xl">calendar_today</span>
+    <!-- APP 底部工具列 -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg py-2 flex justify-around items-center z-50">
+        <button class="flex flex-col items-center text-red-600">
+            <span class="material-icons">calendar_today</span>
             <span class="text-[10px] font-medium">每日行程</span>
         </button>
-        <button class="flex flex-col items-center space-y-0.5 text-slate-400 hover:text-slate-600">
-            <span class="material-icons text-2xl">confirmation_number</span>
-            <span class="text-[10px] font-medium">我的票券</span>
+        <button class="flex flex-col items-center text-gray-400">
+            <span class="material-icons">confirmation_number</span>
+            <span class="text-[10px]">我的票券</span>
         </button>
-        <button class="flex flex-col items-center space-y-0.5 text-slate-400 hover:text-slate-600">
-            <span class="material-icons text-2xl">restaurant</span>
-            <span class="text-[10px] font-medium">西葡美食</span>
-        </button>
-        <button class="flex flex-col items-center space-y-0.5 text-slate-400 hover:text-slate-600">
-            <span class="material-icons text-2xl">info</span>
-            <span class="text-[10px] font-medium">行前備註</span>
+        <button class="flex flex-col items-center text-gray-400">
+            <span class="material-icons">restaurant</span>
+            <span class="text-[10px]">西葡美食</span>
         </button>
     </nav>
 
