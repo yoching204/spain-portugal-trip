@@ -765,11 +765,12 @@
             }
 
             let navUrl = "";
-            // 智慧檢查：不論是特定 Google Map 網址或是內嵌關鍵字，都能智慧偵測並精確連結
+            // 智慧檢查：不論是特定 Google Map 網址或是內嵌關鍵字，都能智慧偵測
             if (item.url.startsWith('http://') || item.url.startsWith('https://')) {
                 navUrl = item.url; // 如果是完整網址，直接讀取
             } else {
-                navUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.url)}`; // 如果是關鍵字，自動拼接
+                // 如果是關鍵字，使用標準搜尋協議網址，完美強制喚醒 App
+                navUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.url)}`;
             }
 
             itemDiv.innerHTML = `
